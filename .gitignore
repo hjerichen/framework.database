@@ -1,0 +1,11 @@
+/logs
+/vendor
+
+/composer.lock
+/phpunit.xml
+
+/.idea/*
+!/.idea/codeStyles/
+!/.idea/dictionaries/
+!/.idea/encodings.xml
+!/.idea/inspectionProfiles/
