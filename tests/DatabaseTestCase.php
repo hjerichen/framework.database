@@ -18,17 +18,20 @@ use SebastianBergmann\Comparator\ComparisonFailure;
 
 class DatabaseTestCase extends TestCase
 {
-    use MySQLTestCaseTrait;
     use ProphecyTrait;
+    use MySQLTestCaseTrait {
+        MySQLTestCaseTrait::setUp as private setUpDatabase;
+    }
 
     protected Connection $connection;
 
     protected function setUp(): void
     {
         parent::setUp();
-
         $connectionProvider = new ConnectionProvider($this->getConfiguration());
         $this->connection = $connectionProvider->getConnection();
+
+        $this->setUpDatabase();
     }
 
     /** @noinspection PhpUndefinedConstantInspection */
