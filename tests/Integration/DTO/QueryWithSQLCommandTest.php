@@ -9,8 +9,7 @@ namespace HJerichen\FrameworkDatabase\Test\Integration\DTO;
 
 use HJerichen\DBUnit\Dataset\Dataset;
 use HJerichen\DBUnit\Dataset\DatasetArray;
-use HJerichen\FrameworkDatabase\Database\Schema\SchemaProvider;
-use HJerichen\FrameworkDatabase\Database\Schema\SchemaSynchronizer;
+use HJerichen\FrameworkDatabase\Database\Schema\TablesProvider;
 use HJerichen\FrameworkDatabase\DTO\Query\QueryWithSQLCommand;
 use HJerichen\FrameworkDatabase\Test\DatabaseTestCase;
 use HJerichen\FrameworkDatabase\Test\Helpers\MyTablesProvider;
@@ -23,9 +22,12 @@ class QueryWithSQLCommandTest extends DatabaseTestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->setUpTable();
-
         $this->queryCommand = new QueryWithSQLCommand($this->connection);
+    }
+
+    protected function getSchemaTablesProvider(): TablesProvider
+    {
+        return new MyTablesProvider();
     }
 
     protected function getDatasetForSetup(): Dataset
@@ -59,15 +61,5 @@ class QueryWithSQLCommandTest extends DatabaseTestCase
         $expected = [$user1, $user2];
         $actual = $this->queryCommand->execute(User::class, $sql, $parameters);
         self::assertEquals($expected, $actual);
-    }
-
-    /* HELPERS */
-
-    private function setUpTable(): void
-    {
-        $tablesProvider = new MyTablesProvider();
-        $schemaProvider = new SchemaProvider($this->connection, $tablesProvider);
-        $schemaSynchronizer = new SchemaSynchronizer($this->connection, $schemaProvider);
-        $schemaSynchronizer->execute();
     }
 }

@@ -3,18 +3,17 @@
 namespace HJerichen\FrameworkDatabase\Test\Integration;
 
 use HJerichen\DBUnit\Dataset\DatasetArray;
-use HJerichen\FrameworkDatabase\Database\Schema\SchemaProvider;
-use HJerichen\FrameworkDatabase\Database\Schema\SchemaSynchronizer;
+use HJerichen\FrameworkDatabase\Database\Schema\TablesProvider;
 use HJerichen\FrameworkDatabase\Test\DatabaseTestCase;
 use HJerichen\FrameworkDatabase\Test\Helpers\MyTablesProvider;
 
 class DatabaseExecuteTest extends DatabaseTestCase
 {
-    protected function setUp(): void
+    protected function getSchemaTablesProvider(): TablesProvider
     {
-        parent::setUp();
-        $this->setUpTable();
+        return new MyTablesProvider();
     }
+
 
     /* TESTS */
 
@@ -28,15 +27,5 @@ class DatabaseExecuteTest extends DatabaseTestCase
             ]
         ]);
         $this->assertDatasetEqualsCurrent($expected);
-    }
-
-    /* HELPERS */
-
-    private function setUpTable(): void
-    {
-        $tablesProvider = new MyTablesProvider();
-        $schemaProvider = new SchemaProvider($this->connection, $tablesProvider);
-        $schemaSynchronizer = new SchemaSynchronizer($this->connection, $schemaProvider);
-        $schemaSynchronizer->execute();
     }
 }

@@ -10,6 +10,10 @@ use HJerichen\DBUnit\Dataset\DatasetArray;
 use HJerichen\DBUnit\MySQLTestCaseTrait;
 use HJerichen\FrameworkDatabase\Configuration;
 use HJerichen\FrameworkDatabase\Database\ConnectionProvider;
+use HJerichen\FrameworkDatabase\Database\Schema\SchemaProvider;
+use HJerichen\FrameworkDatabase\Database\Schema\SchemaSynchronizer;
+use HJerichen\FrameworkDatabase\Database\Schema\TablesProvider;
+use HJerichen\FrameworkDatabase\Database\Schema\TablesProviderEmpty;
 use PDO;
 use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\TestCase;
@@ -31,6 +35,7 @@ class DatabaseTestCase extends TestCase
         $connectionProvider = new ConnectionProvider($this->getConfiguration());
         $this->connection = $connectionProvider->getConnection();
 
+        $this->setUpSchema();
         $this->setUpDatabase();
     }
 
@@ -51,6 +56,19 @@ class DatabaseTestCase extends TestCase
     protected function getDatasetForSetup(): Dataset
     {
         return new DatasetArray([]);
+    }
+
+    protected function setUpSchema(): void
+    {
+        $tablesProvider = $this->getSchemaTablesProvider();
+        $schemaProvider = new SchemaProvider($this->connection, $tablesProvider);
+        $schemaSynchronizer = new SchemaSynchronizer($this->connection, $schemaProvider);
+        $schemaSynchronizer->execute();
+    }
+
+    protected function getSchemaTablesProvider(): TablesProvider
+    {
+        return new TablesProviderEmpty();
     }
 
     protected function assertDatasetEqualsCurrent(Dataset $expected): void

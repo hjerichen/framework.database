@@ -4,8 +4,7 @@ namespace HJerichen\FrameworkDatabase\Test\Integration\DTO;
 
 use HJerichen\DBUnit\Dataset\Dataset;
 use HJerichen\DBUnit\Dataset\DatasetArray;
-use HJerichen\FrameworkDatabase\Database\Schema\SchemaProvider;
-use HJerichen\FrameworkDatabase\Database\Schema\SchemaSynchronizer;
+use HJerichen\FrameworkDatabase\Database\Schema\TablesProvider;
 use HJerichen\FrameworkDatabase\DTO\Query\QueryWithFieldFilterCommand;
 use HJerichen\FrameworkDatabase\Test\DatabaseTestCase;
 use HJerichen\FrameworkDatabase\Test\Helpers\MyTablesProvider;
@@ -18,9 +17,12 @@ class QueryWithFieldFilterCommandTest extends DatabaseTestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->setUpTable();
-
         $this->queryCommand = new QueryWithFieldFilterCommand($this->connection);
+    }
+
+    protected function getSchemaTablesProvider(): TablesProvider
+    {
+        return new MyTablesProvider();
     }
 
     protected function getDatasetForSetup(): Dataset
@@ -51,15 +53,5 @@ class QueryWithFieldFilterCommandTest extends DatabaseTestCase
         $expected = [$user1, $user2];
         $actual = $this->queryCommand->execute(User::class, ['name' => 'doe']);
         self::assertEquals($expected, $actual);
-    }
-
-    /* HELPERS */
-
-    private function setUpTable(): void
-    {
-        $tablesProvider = new MyTablesProvider();
-        $schemaProvider = new SchemaProvider($this->connection, $tablesProvider);
-        $schemaSynchronizer = new SchemaSynchronizer($this->connection, $schemaProvider);
-        $schemaSynchronizer->execute();
     }
 }
