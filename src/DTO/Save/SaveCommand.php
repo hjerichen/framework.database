@@ -9,10 +9,13 @@ namespace HJerichen\FrameworkDatabase\DTO\Save;
 
 use Doctrine\DBAL\Connection;
 use HJerichen\FrameworkDatabase\DTO\DTO;
+use HJerichen\FrameworkDatabase\DTO\QuoteTableColumnTrait;
 use ReflectionClass;
 
 class SaveCommand
 {
+    use QuoteTableColumnTrait;
+
     /** @var DTO[][] */
     private array $groupedObjects;
 
@@ -91,7 +94,7 @@ class SaveCommand
         $valuesSQL = $this->buildValuesSQL($fields, $objectCount);
         $duplicateSQL = $this->buildDuplicateSQL($fields);
         return "
-            INSERT INTO $tableName
+            INSERT INTO {$this->quoteTableName($tableName)}
                 $fieldsSQL
             VALUES
                 $valuesSQL
@@ -102,6 +105,7 @@ class SaveCommand
 
     private function buildFieldsSQL(array $fields): string
     {
+        $fields = array_map([$this, 'quoteColumnName'], $fields);
         return '(' . implode(', ', $fields) . ')';
     }
 
@@ -120,6 +124,7 @@ class SaveCommand
         $fieldStrings = [];
         foreach ($fields as $field) {
             if ($field === 'id') continue;
+            $field = $this->quoteColumnName($field);
             $fieldStrings[] = "$field = VALUES($field)";
         }
         return implode(', ', $fieldStrings);

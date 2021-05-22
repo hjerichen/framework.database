@@ -5,10 +5,16 @@ namespace HJerichen\FrameworkDatabase\DTO\Query;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Exception;
 use Doctrine\DBAL\Result;
+use HJerichen\FrameworkDatabase\DTO\QuoteTableColumnTrait;
 use HJerichen\FrameworkDatabase\DTO\Utils;
 
 abstract class QueryCommandAbstract
 {
+    use QuoteTableColumnTrait {
+        quoteTableName as protected;
+        quoteColumnName as protected;
+    }
+
     public function __construct(
         protected Connection $connection
     ) {

@@ -64,7 +64,7 @@ class QueryWithIdsCommandTest extends TestCase
         $result = $this->prophesize(Result::class);
         $result->iterateAssociative()->willReturn(new ArrayIterator($results));
 
-        $expectedSQL = 'SELECT * FROM user WHERE id in (?, ?, ?)';
+        $expectedSQL = 'SELECT * FROM `user` WHERE `id` in (?, ?, ?)';
         $this->connection->executeQuery($expectedSQL, $ids)->willReturn($result);
 
         $expectedUsers = [$user1, $user2];
@@ -87,7 +87,7 @@ class QueryWithIdsCommandTest extends TestCase
         $result = $this->prophesize(Result::class);
         $result->iterateAssociative()->willReturn(new ArrayIterator($results));
 
-        $expectedSQL = 'SELECT * FROM user WHERE id = ?';
+        $expectedSQL = 'SELECT * FROM `user` WHERE `id` = ?';
         $this->connection->executeQuery($expectedSQL, $ids)->willReturn($result);
 
         $expectedUsers = [$user1];
@@ -110,7 +110,7 @@ class QueryWithIdsCommandTest extends TestCase
         $result = $this->prophesize(Result::class);
         $result->iterateAssociative()->willReturn(new ArrayIterator($results));
 
-        $expectedSQL = 'SELECT * FROM user WHERE id = ?';
+        $expectedSQL = 'SELECT * FROM `user` WHERE `id` = ?';
         $this->connection->executeQuery($expectedSQL, [$id])->willReturn($result);
 
         $expectedUser = $user1;
@@ -124,7 +124,7 @@ class QueryWithIdsCommandTest extends TestCase
         $result = $this->prophesize(Result::class);
         $result->iterateAssociative()->willReturn(new ArrayIterator([]));
 
-        $expectedSQL = 'SELECT * FROM user WHERE id = ?';
+        $expectedSQL = 'SELECT * FROM `user` WHERE `id` = ?';
         $this->connection->executeQuery($expectedSQL, [$id])->willReturn($result);
 
         $actualUser = $this->queryCommand->executeForOne(User::class, $id);

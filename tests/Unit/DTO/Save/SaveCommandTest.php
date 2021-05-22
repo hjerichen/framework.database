@@ -41,12 +41,12 @@ class SaveCommandTest extends TestCase
         $user->email = 'test';
 
         $expectedSQL = "
-            INSERT INTO user
-                (name, email)
+            INSERT INTO `user`
+                (`name`, `email`)
             VALUES
                 (:name_1, :email_1)
             ON DUPLICATE KEY UPDATE
-                name = VALUES(name), email = VALUES(email)
+                `name` = VALUES(`name`), `email` = VALUES(`email`)
         ";
         $expectedParameters = [
             'name_1' => 'jon',
@@ -69,12 +69,12 @@ class SaveCommandTest extends TestCase
         $user2->email = 'test2';
 
         $expectedSQL = "
-            INSERT INTO user
-                (name, email)
+            INSERT INTO `user`
+                (`name`, `email`)
             VALUES
                 (:name_1, :email_1), (:name_2, :email_2)
             ON DUPLICATE KEY UPDATE
-                name = VALUES(name), email = VALUES(email)
+                `name` = VALUES(`name`), `email` = VALUES(`email`)
         ";
         $expectedParameters = [
             'name_1' => 'jon',
@@ -107,12 +107,12 @@ class SaveCommandTest extends TestCase
         $user2->email = 'test2';
 
         $expectedSQL1 = "
-            INSERT INTO user
-                (id, name)
+            INSERT INTO `user`
+                (`id`, `name`)
             VALUES
                 (:id_1, :name_1)
             ON DUPLICATE KEY UPDATE
-                name = VALUES(name)
+                `name` = VALUES(`name`)
         ";
         $expectedParameters1 = [
             'id_1' => 33,
@@ -123,12 +123,12 @@ class SaveCommandTest extends TestCase
             ->shouldBeCalledOnce();
 
         $expectedSQL2 = "
-            INSERT INTO user
-                (name, email)
+            INSERT INTO `user`
+                (`name`, `email`)
             VALUES
                 (:name_1, :email_1)
             ON DUPLICATE KEY UPDATE
-                name = VALUES(name), email = VALUES(email)
+                `name` = VALUES(`name`), `email` = VALUES(`email`)
         ";
         $expectedParameters2 = [
             'name_1' => 'doe',
@@ -152,12 +152,12 @@ class SaveCommandTest extends TestCase
         $user2->email = 'test2';
 
         $expectedSQL1 = "
-            INSERT INTO product
-                (id, ean)
+            INSERT INTO `product`
+                (`id`, `ean`)
             VALUES
                 (:id_1, :ean_1)
             ON DUPLICATE KEY UPDATE
-                ean = VALUES(ean)
+                `ean` = VALUES(`ean`)
         ";
         $expectedParameters1 = [
             'id_1' => 33,
@@ -168,12 +168,12 @@ class SaveCommandTest extends TestCase
             ->shouldBeCalledOnce();
 
         $expectedSQL2 = "
-            INSERT INTO user
-                (name, email)
+            INSERT INTO `user`
+                (`name`, `email`)
             VALUES
                 (:name_1, :email_1)
             ON DUPLICATE KEY UPDATE
-                name = VALUES(name), email = VALUES(email)
+                `name` = VALUES(`name`), `email` = VALUES(`email`)
         ";
         $expectedParameters2 = [
             'name_1' => 'doe',
@@ -201,12 +201,12 @@ class SaveCommandTest extends TestCase
         $user3->email = 'test3';
 
         $expectedSQL = "
-            INSERT INTO user
-                (name, email)
+            INSERT INTO `user`
+                (`name`, `email`)
             VALUES
                 (:name_1, :email_1), (:name_2, :email_2), (:name_3, :email_3)
             ON DUPLICATE KEY UPDATE
-                name = VALUES(name), email = VALUES(email)
+                `name` = VALUES(`name`), `email` = VALUES(`email`)
         ";
         $expectedParameters = [
             'name_1' => 'jon',
@@ -243,12 +243,12 @@ class SaveCommandTest extends TestCase
         $user3->email = 'test3';
 
         $expectedSQL1 = "
-            INSERT INTO user
-                (id, name, email)
+            INSERT INTO `user`
+                (`id`, `name`, `email`)
             VALUES
                 (:id_1, :name_1, :email_1), (:id_2, :name_2, :email_2)
             ON DUPLICATE KEY UPDATE
-                name = VALUES(name), email = VALUES(email)
+                `name` = VALUES(`name`), `email` = VALUES(`email`)
         ";
         $expectedParameters1 = [
             'id_1' => 1,
@@ -263,12 +263,12 @@ class SaveCommandTest extends TestCase
             ->shouldBeCalledOnce();
 
         $expectedSQL2 = "
-            INSERT INTO user
-                (name, email)
+            INSERT INTO `user`
+                (`name`, `email`)
             VALUES
                 (:name_1, :email_1)
             ON DUPLICATE KEY UPDATE
-                name = VALUES(name), email = VALUES(email)
+                `name` = VALUES(`name`), `email` = VALUES(`email`)
         ";
         $expectedParameters2 = [
             'name_1' => 'doe',

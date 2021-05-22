@@ -34,13 +34,15 @@ class QueryWithIdsCommand extends QueryCommandAbstract
 
     private function buildSQLMulti(string $tableName, array $ids): string
     {
+        $tableName = $this->quoteTableName($tableName);
         $valuesString = $this->buildValuesString($ids);
-        return "SELECT * FROM $tableName WHERE id in ($valuesString)";
+        return "SELECT * FROM $tableName WHERE `id` in ($valuesString)";
     }
 
     private function buildSQLSingle(string $tableName): string
     {
-        return "SELECT * FROM $tableName WHERE id = ?";
+        $tableName = $this->quoteTableName($tableName);
+        return "SELECT * FROM $tableName WHERE `id` = ?";
     }
 
     private function buildValuesString(array $ids): string

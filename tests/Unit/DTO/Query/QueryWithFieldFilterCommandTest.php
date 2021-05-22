@@ -33,7 +33,7 @@ class QueryWithFieldFilterCommandTest extends TestCase
 
     public function testForEmptyFieldArray(): void
     {
-        $expectedSQL = "SELECT * FROM user";
+        $expectedSQL = "SELECT * FROM `user`";
 
         $results = [
             ['id' => '1'],
@@ -60,7 +60,7 @@ class QueryWithFieldFilterCommandTest extends TestCase
             'name' => 'test',
             'email' => 'test@test.de'
         ];
-        $expectedSQL = "SELECT * FROM user WHERE name = :name AND email = :email";
+        $expectedSQL = "SELECT * FROM `user` WHERE `name` = :name AND `email` = :email";
 
         $results = [
             ['id' => '1'],

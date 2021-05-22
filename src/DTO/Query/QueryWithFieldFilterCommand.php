@@ -23,7 +23,7 @@ class QueryWithFieldFilterCommand extends QueryCommandAbstract
         $tableName = $this->getTableName($class);
         $wheres = $this->buildWheres($fieldFilter);
 
-        $sql = "SELECT * FROM $tableName";
+        $sql = "SELECT * FROM {$this->quoteTableName($tableName)}";
         if (count($wheres) === 0) return $sql;
 
         return "$sql WHERE " . implode(' AND ', $wheres);
@@ -33,7 +33,7 @@ class QueryWithFieldFilterCommand extends QueryCommandAbstract
     {
         $wheres = [];
         foreach ($parameters as $key => $value) {
-            $wheres[] = "$key = :$key";
+            $wheres[] = "{$this->quoteColumnName($key)} = :$key";
         }
         return $wheres;
     }
