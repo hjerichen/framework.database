@@ -12,6 +12,7 @@ use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Result;
 use HJerichen\FrameworkDatabase\DTO\Query\QueryWithIdsCommand;
 use HJerichen\FrameworkDatabase\Test\Helpers\User;
+use HJerichen\FrameworkDatabase\Test\Helpers\User1;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
@@ -92,6 +93,29 @@ class QueryWithIdsCommandTest extends TestCase
 
         $expectedUsers = [$user1];
         $actualUsers = $this->queryCommand->execute(User::class, $ids);
+        self::assertEquals($expectedUsers, $actualUsers);
+    }
+
+    public function testForOneIdWithTableAttribute(): void
+    {
+        $ids = [1];
+
+        $user1 = new User1();
+        $user1->id = 1;
+        $user1->name = 'jon';
+        $user1->email = 'test@test.de';
+
+        $results = [
+            ['id' => '1', 'name' => 'jon', 'email' => 'test@test.de'],
+        ];
+        $result = $this->prophesize(Result::class);
+        $result->iterateAssociative()->willReturn(new ArrayIterator($results));
+
+        $expectedSQL = 'SELECT * FROM `user` WHERE `id` = ?';
+        $this->connection->executeQuery($expectedSQL, $ids)->willReturn($result);
+
+        $expectedUsers = [$user1];
+        $actualUsers = $this->queryCommand->execute(User1::class, $ids);
         self::assertEquals($expectedUsers, $actualUsers);
     }
 

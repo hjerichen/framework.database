@@ -11,6 +11,7 @@ use Doctrine\DBAL\Connection;
 use HJerichen\FrameworkDatabase\DTO\Save\SaveCommand;
 use HJerichen\FrameworkDatabase\Test\Helpers\Product;
 use HJerichen\FrameworkDatabase\Test\Helpers\User;
+use HJerichen\FrameworkDatabase\Test\Helpers\User1;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
@@ -37,6 +38,30 @@ class SaveCommandTest extends TestCase
     public function testWithOneObject(): void
     {
         $user = new User();
+        $user->name = 'jon';
+        $user->email = 'test';
+
+        $expectedSQL = "
+            INSERT INTO `user`
+                (`name`, `email`)
+            VALUES
+                (:name_1, :email_1)
+            ON DUPLICATE KEY UPDATE
+                `name` = VALUES(`name`), `email` = VALUES(`email`)
+        ";
+        $expectedParameters = [
+            'name_1' => 'jon',
+            'email_1' => 'test'
+        ];
+        $this->connection
+            ->executeStatement($expectedSQL, $expectedParameters)
+            ->shouldBeCalledOnce();
+        $this->command->execute([$user]);
+    }
+
+    public function testWithOneObjectHasAttribute(): void
+    {
+        $user = new User1();
         $user->name = 'jon';
         $user->email = 'test';
 

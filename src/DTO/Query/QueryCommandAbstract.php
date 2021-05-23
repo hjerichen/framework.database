@@ -6,6 +6,9 @@ use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Exception;
 use Doctrine\DBAL\Result;
 use HJerichen\FrameworkDatabase\DTO\QuoteTableColumnTrait;
+use HJerichen\FrameworkDatabase\DTO\TableNameResolver\TableNameResolver;
+use HJerichen\FrameworkDatabase\DTO\TableNameResolver\TableNameResolverAttribute;
+use HJerichen\FrameworkDatabase\DTO\TableNameResolver\TableNameResolverBase;
 use HJerichen\FrameworkDatabase\DTO\Utils;
 
 abstract class QueryCommandAbstract
@@ -15,9 +18,12 @@ abstract class QueryCommandAbstract
         quoteColumnName as protected;
     }
 
+    private TableNameResolver $tableNameResolver;
+
     public function __construct(
         protected Connection $connection
     ) {
+        $this->tableNameResolver = new TableNameResolverAttribute(new TableNameResolverBase());
     }
 
     /**
@@ -35,8 +41,7 @@ abstract class QueryCommandAbstract
 
     protected function getTableName(string $class): string
     {
-        $exploded = explode('\\', $class);
-        return lcfirst(end($exploded));
+        return $this->tableNameResolver->getTableName($class);
     }
 
     private function buildDTOs(string $class, Result $result): array

@@ -10,11 +10,16 @@ namespace HJerichen\FrameworkDatabase\DTO\Save;
 use Doctrine\DBAL\Connection;
 use HJerichen\FrameworkDatabase\DTO\DTO;
 use HJerichen\FrameworkDatabase\DTO\QuoteTableColumnTrait;
+use HJerichen\FrameworkDatabase\DTO\TableNameResolver\TableNameResolver;
+use HJerichen\FrameworkDatabase\DTO\TableNameResolver\TableNameResolverAttribute;
+use HJerichen\FrameworkDatabase\DTO\TableNameResolver\TableNameResolverBase;
 use ReflectionClass;
 
 class SaveCommand
 {
     use QuoteTableColumnTrait;
+
+    private TableNameResolver $tableNameResolver;
 
     /** @var DTO[][] */
     private array $groupedObjects;
@@ -22,6 +27,7 @@ class SaveCommand
     public function __construct(
         private Connection $connection
     ) {
+        $this->tableNameResolver = new TableNameResolverAttribute(new TableNameResolverBase());
     }
 
     /**
@@ -48,8 +54,7 @@ class SaveCommand
 
     protected function getTableName(DTO $object): string
     {
-        $exploded = explode('\\', $object::class);
-        return lcfirst(end($exploded));
+        return $this->tableNameResolver->getTableName($object);
     }
 
     private function buildFieldsString(object $object): string
