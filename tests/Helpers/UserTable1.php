@@ -18,7 +18,9 @@ class UserTable1 implements Table
         ]);
         $table->addColumn('email', 'string');
         $table->addColumn('name', 'string');
-        $table->addColumn('type', 'string');
+        $table->addColumn('type', 'string', [
+            'default' => UserType::TYPE1()
+        ]);
         $table->setPrimaryKey(['id']);
     }
 }

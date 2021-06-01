@@ -46,7 +46,7 @@ class SaveCommandTest extends DatabaseTestCase
 
         $expectedDataset = new DatasetArray([
             'user' => [
-                ['id' => 1, 'name' => 'jon', 'email' => 'test1'],
+                ['id' => 1, 'name' => 'jon', 'email' => 'test1', 'type' => 'type1'],
                 ['id' => 2, 'name' => 'doe', 'email' => 'test2', 'type' => 'type2'],
             ]
         ]);
