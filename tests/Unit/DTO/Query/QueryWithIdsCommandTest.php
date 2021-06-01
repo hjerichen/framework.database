@@ -1,4 +1,4 @@
-<?php
+<?php /** @noinspection DuplicatedCode */
 /**
  * @noinspection SqlResolve
  * @noinspection UnknownInspectionInspection
@@ -13,6 +13,7 @@ use Doctrine\DBAL\Result;
 use HJerichen\FrameworkDatabase\DTO\Query\QueryWithIdsCommand;
 use HJerichen\FrameworkDatabase\Test\Helpers\User;
 use HJerichen\FrameworkDatabase\Test\Helpers\User1;
+use HJerichen\FrameworkDatabase\Test\Helpers\UserType;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
@@ -153,5 +154,29 @@ class QueryWithIdsCommandTest extends TestCase
 
         $actualUser = $this->queryCommand->executeForOne(User::class, $id);
         self::assertNull($actualUser);
+    }
+
+    public function testForEnum(): void
+    {
+        $ids = [1];
+
+        $user = new User1();
+        $user->id = 1;
+        $user->name = 'jon';
+        $user->email = 'test@test.de';
+        $user->type = UserType::TYPE1();
+
+        $results = [
+            ['id' => '1', 'name' => 'jon', 'email' => 'test@test.de', 'type' => 'type1'],
+        ];
+        $result = $this->prophesize(Result::class);
+        $result->iterateAssociative()->willReturn(new ArrayIterator($results));
+
+        $expectedSQL = 'SELECT * FROM `user` WHERE `id` = ?';
+        $this->connection->executeQuery($expectedSQL, $ids)->willReturn($result);
+
+        $expectedUsers = [$user];
+        $actualUsers = $this->queryCommand->execute(User1::class, $ids);
+        self::assertEquals($expectedUsers, $actualUsers);
     }
 }

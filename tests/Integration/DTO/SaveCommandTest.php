@@ -8,6 +8,8 @@ use HJerichen\FrameworkDatabase\DTO\Save\SaveCommand;
 use HJerichen\FrameworkDatabase\Test\DatabaseTestCase;
 use HJerichen\FrameworkDatabase\Test\Helpers\MyTablesProvider;
 use HJerichen\FrameworkDatabase\Test\Helpers\User;
+use HJerichen\FrameworkDatabase\Test\Helpers\User1;
+use HJerichen\FrameworkDatabase\Test\Helpers\UserType;
 
 class SaveCommandTest extends DatabaseTestCase
 {
@@ -32,9 +34,10 @@ class SaveCommandTest extends DatabaseTestCase
         $user1->name = 'jon';
         $user1->email = 'test1';
 
-        $user2 = new User();
+        $user2 = new User1();
         $user2->name = 'doe';
         $user2->email = 'test2';
+        $user2->type = UserType::TYPE2();
 
         $this->saveCommand->execute([$user1, $user2]);
 
@@ -44,7 +47,7 @@ class SaveCommandTest extends DatabaseTestCase
         $expectedDataset = new DatasetArray([
             'user' => [
                 ['id' => 1, 'name' => 'jon', 'email' => 'test1'],
-                ['id' => 2, 'name' => 'doe', 'email' => 'test2'],
+                ['id' => 2, 'name' => 'doe', 'email' => 'test2', 'type' => 'type2'],
             ]
         ]);
         $this->assertDatasetEqualsCurrent($expectedDataset);

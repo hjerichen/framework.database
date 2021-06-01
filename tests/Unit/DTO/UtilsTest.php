@@ -4,6 +4,8 @@ namespace HJerichen\FrameworkDatabase\Test\Unit\DTO;
 
 use HJerichen\FrameworkDatabase\DTO\Utils;
 use HJerichen\FrameworkDatabase\Test\Helpers\User;
+use HJerichen\FrameworkDatabase\Test\Helpers\User1;
+use HJerichen\FrameworkDatabase\Test\Helpers\UserType;
 use PHPUnit\Framework\TestCase;
 
 class UtilsTest extends TestCase
@@ -168,5 +170,17 @@ class UtilsTest extends TestCase
         $expected = false;
         $actual = $user->active;
         self::assertSame($expected, $actual);
+    }
+
+    public function testPopulateObjectForStringToEnum(): void
+    {
+        $data = ['type' => 'type1'];
+        $user = new User1();
+
+        Utils::populateObject($user, $data);
+
+        $expected = UserType::TYPE1();
+        $actual = $user->type;
+        self::assertEquals($expected, $actual);
     }
 }

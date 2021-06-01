@@ -60,7 +60,7 @@ class SchemaSynchronizerTest extends TestCase
         $this->schemaProvider->getWantedSchema()->willReturn($schemaWanted);
         $this->schemaProvider->getCurrentSchema()->willReturn($schemaCurrent);
 
-        $expected = "ALTER TABLE user ADD name VARCHAR(255) NOT NULL";
+        $expected = "ALTER TABLE user ADD name VARCHAR(255) NOT NULL, ADD type VARCHAR(255) NOT NULL";
         $this->connection->executeQuery($expected)->shouldBeCalledOnce();
 
         $this->schemaSynchronizer->execute();

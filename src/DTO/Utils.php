@@ -2,6 +2,7 @@
 
 namespace HJerichen\FrameworkDatabase\DTO;
 
+use HJerichen\Framework\Types\Enum;
 use ReflectionClass;
 use ReflectionNamedType;
 use ReflectionType;
@@ -38,8 +39,9 @@ class Utils
     private static function convertToCorrectType(ReflectionType|null $type, mixed $value): mixed
     {
         if (!($type instanceof ReflectionNamedType)) return $value;
-        if (!$type->isBuiltin()) return $value;
-
+        if (is_subclass_of($type->getName(), Enum::class)) {
+            return call_user_func([$type->getName(), 'from'], $value);
+        }
         return match ($type->getName()) {
             'int' => (int)$value,
             'bool' => (bool)$value,

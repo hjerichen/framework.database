@@ -12,6 +12,7 @@ use HJerichen\FrameworkDatabase\DTO\Save\SaveCommand;
 use HJerichen\FrameworkDatabase\Test\Helpers\Product;
 use HJerichen\FrameworkDatabase\Test\Helpers\User;
 use HJerichen\FrameworkDatabase\Test\Helpers\User1;
+use HJerichen\FrameworkDatabase\Test\Helpers\UserType;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
@@ -308,6 +309,30 @@ class SaveCommandTest extends TestCase
         self::assertSame(1, $user1->id);
         self::assertSame(8, $user2->id);
         self::assertSame(2, $user3->id);
+    }
+
+    public function testWithEnum(): void
+    {
+        $user = new User1();
+        $user->name = 'jon';
+        $user->type = UserType::TYPE1();
+
+        $expectedSQL = "
+            INSERT INTO `user`
+                (`name`, `type`)
+            VALUES
+                (:name_1, :type_1)
+            ON DUPLICATE KEY UPDATE
+                `name` = VALUES(`name`), `type` = VALUES(`type`)
+        ";
+        $expectedParameters = [
+            'name_1' => 'jon',
+            'type_1' => 'type1'
+        ];
+        $this->connection
+            ->executeStatement($expectedSQL, $expectedParameters)
+            ->shouldBeCalledOnce();
+        $this->command->execute([$user]);
     }
 
     public function testDTOOnlyHasID(): void
