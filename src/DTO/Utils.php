@@ -43,10 +43,10 @@ class Utils
             return call_user_func([$type->getName(), 'from'], $value);
         }
         return match ($type->getName()) {
-            'int' => (int)$value,
-            'bool' => (bool)$value,
-            'float' => (float)$value,
-            'string' => (string)$value,
+            'int' => $type->allowsNull() && $value === null ? null : (int)$value,
+            'bool' => $type->allowsNull() && $value === null ? null : (bool)$value,
+            'float' => $type->allowsNull() && $value === null ? null : (float)$value,
+            'string' => $type->allowsNull() && $value === null ? null : (string)$value,
             default => $value,
         };
     }

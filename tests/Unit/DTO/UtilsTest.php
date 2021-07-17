@@ -5,6 +5,7 @@ namespace HJerichen\FrameworkDatabase\Test\Unit\DTO;
 use HJerichen\FrameworkDatabase\DTO\Utils;
 use HJerichen\FrameworkDatabase\Test\Helpers\User;
 use HJerichen\FrameworkDatabase\Test\Helpers\User1;
+use HJerichen\FrameworkDatabase\Test\Helpers\User2;
 use HJerichen\FrameworkDatabase\Test\Helpers\UserType;
 use PHPUnit\Framework\TestCase;
 
@@ -82,6 +83,21 @@ class UtilsTest extends TestCase
         self::assertEquals($expected, $actual);
     }
 
+    public function testPopulateObjectForStringNull(): void
+    {
+        $data = [
+            'id' => 4,
+            'name' => null
+        ];
+        $user = new User2();
+
+        Utils::populateObject($user, $data);
+
+        $expected = null;
+        $actual = $user->name;
+        self::assertSame($expected, $actual);
+    }
+
     public function testPopulateObjectForDataIsNotProperty(): void
     {
         $data = [
@@ -112,6 +128,18 @@ class UtilsTest extends TestCase
         self::assertSame($expected, $actual);
     }
 
+    public function testPopulateObjectForStringToIntNull(): void
+    {
+        $data = ['logins' => null];
+        $user = new User2();
+
+        Utils::populateObject($user, $data);
+
+        $expected = null;
+        $actual = $user->logins;
+        self::assertSame($expected, $actual);
+    }
+
     public function testPopulateObjectForStringToFloat(): void
     {
         $data = ['value' => '4.88'];
@@ -120,6 +148,18 @@ class UtilsTest extends TestCase
         Utils::populateObject($user, $data);
 
         $expected = 4.88;
+        $actual = $user->value;
+        self::assertSame($expected, $actual);
+    }
+
+    public function testPopulateObjectForStringToFloatNull(): void
+    {
+        $data = ['value' => null];
+        $user = new User2();
+
+        Utils::populateObject($user, $data);
+
+        $expected = null;
         $actual = $user->value;
         self::assertSame($expected, $actual);
     }
@@ -168,6 +208,18 @@ class UtilsTest extends TestCase
         Utils::populateObject($user, $data);
 
         $expected = false;
+        $actual = $user->active;
+        self::assertSame($expected, $actual);
+    }
+
+    public function testPopulateObjectForStringToBoolNull(): void
+    {
+        $data = ['active' => null];
+        $user = new User2();
+
+        Utils::populateObject($user, $data);
+
+        $expected = null;
         $actual = $user->active;
         self::assertSame($expected, $actual);
     }
