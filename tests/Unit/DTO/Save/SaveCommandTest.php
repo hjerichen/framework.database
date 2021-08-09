@@ -12,6 +12,7 @@ use HJerichen\FrameworkDatabase\DTO\Save\SaveCommand;
 use HJerichen\FrameworkDatabase\Test\Helpers\Product;
 use HJerichen\FrameworkDatabase\Test\Helpers\User;
 use HJerichen\FrameworkDatabase\Test\Helpers\User1;
+use HJerichen\FrameworkDatabase\Test\Helpers\User2;
 use HJerichen\FrameworkDatabase\Test\Helpers\UserType;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
@@ -345,5 +346,35 @@ class SaveCommandTest extends TestCase
             ->shouldNotBeCalled();
 
         $this->command->execute([$user1]);
+    }
+
+    public function testWithBoolean(): void
+    {
+        $user1 = new User2();
+        $user1->name = 'jon1';
+        $user1->active = true;
+
+        $user2 = new User2();
+        $user2->name = 'jon2';
+        $user2->active = false;
+
+        $expectedSQL = "
+            INSERT INTO `user2`
+                (`active`, `name`)
+            VALUES
+                (:active_1, :name_1), (:active_2, :name_2)
+            ON DUPLICATE KEY UPDATE
+                `active` = VALUES(`active`), `name` = VALUES(`name`)
+        ";
+        $expectedParameters = [
+            'active_1' => 1,
+            'name_1' => 'jon1',
+            'active_2' => 0,
+            'name_2' => 'jon2',
+        ];
+        $this->connection
+            ->executeStatement($expectedSQL, $expectedParameters)
+            ->shouldBeCalledOnce();
+        $this->command->execute([$user1, $user2]);
     }
 }

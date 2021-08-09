@@ -141,7 +141,11 @@ class SaveCommand
         foreach ($objects as $index => $object) {
             foreach ($fields as $field) {
                 $key = $field . '_' . ($index + 1);
-                $parameters[$key] = $object->$field;
+                if (is_bool($object->$field)) {
+                    $parameters[$key] = (int)$object->$field;
+                } else {
+                    $parameters[$key] = $object->$field;
+                }
             }
         }
         return $parameters;
