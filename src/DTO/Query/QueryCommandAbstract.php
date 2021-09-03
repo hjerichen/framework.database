@@ -5,6 +5,7 @@ namespace HJerichen\FrameworkDatabase\DTO\Query;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Exception;
 use Doctrine\DBAL\Result;
+use HJerichen\FrameworkDatabase\DTO\DTO;
 use HJerichen\FrameworkDatabase\DTO\QuoteTableColumnTrait;
 use HJerichen\FrameworkDatabase\DTO\TableNameResolver\TableNameResolver;
 use HJerichen\FrameworkDatabase\DTO\TableNameResolver\TableNameResolverAttribute;
@@ -19,6 +20,7 @@ abstract class QueryCommandAbstract
     }
 
     private TableNameResolver $tableNameResolver;
+    private string|null $groupBy = null;
 
     public function __construct(
         protected Connection $connection
@@ -27,14 +29,17 @@ abstract class QueryCommandAbstract
     }
 
     /**
-     * @param string $class
+     * @param string $class Should implement DTO interface.
      * @param string $sql
      * @param array<string, mixed> $parameters
-     * @return array
+     * @param string|null $groupBy
+     * @return DTO[]|DTO[][] Depending on group by is set.
      * @throws Exception
      */
-    protected function executeForSQL(string $class, string $sql, array $parameters = []): array
+    protected function executeForSQL(string $class, string $sql, array $parameters = [], string|null $groupBy = null): array
     {
+        $this->groupBy = $groupBy;
+
         $result = $this->connection->executeQuery($sql, $parameters);
         return $this->buildDTOs($class, $result);
     }
@@ -49,7 +54,12 @@ abstract class QueryCommandAbstract
         $objects = [];
         foreach ($result->iterateAssociative() as $data) {
             $object = new $class;
-            $objects[] = $object;
+            if ($this->groupBy !== null) {
+                $group = $data[$this->groupBy] ?? '';
+                $objects[$group][] = $object;
+            } else {
+                $objects[] = $object;
+            }
             Utils::populateObject($object, $data);
         }
         return $objects;

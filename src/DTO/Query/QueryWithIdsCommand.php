@@ -7,8 +7,17 @@ declare(strict_types=1);
 
 namespace HJerichen\FrameworkDatabase\DTO\Query;
 
+use Doctrine\DBAL\Exception;
+use HJerichen\FrameworkDatabase\DTO\DTO;
+
 class QueryWithIdsCommand extends QueryCommandAbstract
 {
+    /**
+     * @param string $class Should implement DTO interface.
+     * @param int[] $ids
+     * @return DTO[]
+     * @throws Exception
+     */
     public function execute(string $class, array $ids): array
     {
         if (count($ids) === 0) return [];
@@ -17,6 +26,12 @@ class QueryWithIdsCommand extends QueryCommandAbstract
         return $this->executeForSQL($class, $sql, $ids);
     }
 
+    /**
+     * @param string $class Should extend DTO interface.
+     * @param int $ids
+     * @return DTO
+     * @throws Exception
+     */
     public function executeForOne(string $class, int $id): ?object
     {
         $sql = $this->buildSQL($class, [$id]);

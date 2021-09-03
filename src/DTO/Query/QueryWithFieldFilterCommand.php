@@ -3,13 +3,14 @@
 namespace HJerichen\FrameworkDatabase\DTO\Query;
 
 use Doctrine\DBAL\Exception;
+use HJerichen\FrameworkDatabase\DTO\DTO;
 
 class QueryWithFieldFilterCommand extends QueryCommandAbstract
 {
     /**
-     * @param string $class
+     * @param string $class Should implement DTO interface.
      * @param array<string, mixed> $fieldFilter
-     * @return array
+     * @return DTO[]
      * @throws Exception
      */
     public function execute(string $class, array $fieldFilter = []): array
