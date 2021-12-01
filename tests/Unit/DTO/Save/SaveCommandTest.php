@@ -7,6 +7,8 @@ declare(strict_types=1);
 
 namespace HJerichen\FrameworkDatabase\Test\Unit\DTO\Save;
 
+use DateTime;
+use DateTimeImmutable;
 use Doctrine\DBAL\Connection;
 use HJerichen\FrameworkDatabase\DTO\Save\SaveCommand;
 use HJerichen\FrameworkDatabase\Test\Helpers\Product;
@@ -329,6 +331,32 @@ class SaveCommandTest extends TestCase
         $expectedParameters = [
             'name_1' => 'jon',
             'type_1' => 'type1'
+        ];
+        $this->connection
+            ->executeStatement($expectedSQL, $expectedParameters)
+            ->shouldBeCalledOnce();
+        $this->command->execute([$user]);
+    }
+
+    public function testWithDateTime(): void
+    {
+        $user = new User1();
+        $user->name = 'jon';
+        $user->date = new DateTime('2020-10-01 09:00:00');
+        $user->dateImmutable = new DateTimeImmutable('2020-10-01 10:00:00');
+
+        $expectedSQL = "
+            INSERT INTO `user`
+                (`name`, `date`, `dateImmutable`)
+            VALUES
+                (:name_1, :date_1, :dateImmutable_1)
+            ON DUPLICATE KEY UPDATE
+                `name` = VALUES(`name`), `date` = VALUES(`date`), `dateImmutable` = VALUES(`dateImmutable`)
+        ";
+        $expectedParameters = [
+            'name_1' => 'jon',
+            'date_1' => '2020-10-01 09:00:00',
+            'dateImmutable_1' => '2020-10-01 10:00:00',
         ];
         $this->connection
             ->executeStatement($expectedSQL, $expectedParameters)

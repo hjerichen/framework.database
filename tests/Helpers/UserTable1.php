@@ -12,12 +12,18 @@ class UserTable1 implements Table
     public function addToSchema(Schema $schema): void
     {
         $table = $schema->createTable('user');
-        $table->addColumn('id', 'integer',[
+        $table->addColumn('id', 'integer', [
             'unsigned' => true,
             'autoincrement' => true
         ]);
         $table->addColumn('email', 'string');
         $table->addColumn('name', 'string');
+        $table->addColumn('date', 'string', [
+            'notnull' => false
+        ]);
+        $table->addColumn('dateImmutable', 'string', [
+            'notnull' => false
+        ]);
         $table->addColumn('type', 'string', [
             'default' => UserType::TYPE1()
         ]);

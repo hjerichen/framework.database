@@ -17,6 +17,12 @@ class UserTable2 implements Table
             'autoincrement' => true
         ]);
         $table->addColumn('email', 'string');
+        $table->addColumn('date', 'string', [
+            'notnull' => false
+        ]);
+        $table->addColumn('dateImmutable', 'string', [
+            'notnull' => false
+        ]);
         $table->setPrimaryKey(['id']);
     }
 }

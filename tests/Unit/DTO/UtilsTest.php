@@ -2,6 +2,8 @@
 
 namespace HJerichen\FrameworkDatabase\Test\Unit\DTO;
 
+use DateTime;
+use DateTimeImmutable;
 use HJerichen\FrameworkDatabase\DTO\Utils;
 use HJerichen\FrameworkDatabase\Test\Helpers\User;
 use HJerichen\FrameworkDatabase\Test\Helpers\User1;
@@ -234,5 +236,51 @@ class UtilsTest extends TestCase
         $expected = UserType::TYPE1();
         $actual = $user->type;
         self::assertEquals($expected, $actual);
+    }
+
+    public function testPopulateObjectForStringToDate(): void
+    {
+        $data = ['date' => '2020-10-01 08:00:00'];
+        $user = new User1();
+
+        Utils::populateObject($user, $data);
+
+        $expected = '01.10.2020 08:00:00';
+        $actual = $user->date->format('d.m.Y H:i:s');
+        self::assertInstanceOf(DateTime::class, $user->date);
+        self::assertEquals($expected, $actual);
+    }
+
+    public function testPopulateObjectForStringToDateForNull(): void
+    {
+        $data = ['date' => null];
+        $user = new User1();
+
+        Utils::populateObject($user, $data);
+
+        self::assertNull($user->date);
+    }
+
+    public function testPopulateObjectForStringToDateImmutable(): void
+    {
+        $data = ['dateImmutable' => '2020-10-01 08:00:00'];
+        $user = new User1();
+
+        Utils::populateObject($user, $data);
+
+        $expected = '01.10.2020 08:00:00';
+        $actual = $user->dateImmutable->format('d.m.Y H:i:s');
+        self::assertInstanceOf(DateTimeImmutable::class, $user->dateImmutable);
+        self::assertEquals($expected, $actual);
+    }
+
+    public function testPopulateObjectForStringToDateImmutableForNull(): void
+    {
+        $data = ['dateImmutable' => null];
+        $user = new User1();
+
+        Utils::populateObject($user, $data);
+
+        self::assertNull($user->dateImmutable);
     }
 }

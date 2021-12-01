@@ -2,6 +2,8 @@
 
 namespace HJerichen\FrameworkDatabase\Test\Integration\DTO;
 
+use DateTime;
+use DateTimeImmutable;
 use HJerichen\DBUnit\Dataset\DatasetArray;
 use HJerichen\FrameworkDatabase\Database\Schema\TablesProvider;
 use HJerichen\FrameworkDatabase\DTO\Save\SaveCommand;
@@ -38,6 +40,8 @@ class SaveCommandTest extends DatabaseTestCase
         $user2->name = 'doe';
         $user2->email = 'test2';
         $user2->type = UserType::TYPE2();
+        $user2->date = new DateTime('2020-01-01 00:00:00');
+        $user2->dateImmutable = new DateTimeImmutable('2020-01-01 10:00:00');
 
         $this->saveCommand->execute([$user1, $user2]);
 
@@ -46,8 +50,22 @@ class SaveCommandTest extends DatabaseTestCase
 
         $expectedDataset = new DatasetArray([
             'user' => [
-                ['id' => 1, 'name' => 'jon', 'email' => 'test1', 'type' => 'type1'],
-                ['id' => 2, 'name' => 'doe', 'email' => 'test2', 'type' => 'type2'],
+                [
+                    'id' => 1,
+                    'name' => 'jon',
+                    'email' => 'test1',
+                    'type' => 'type1',
+                    'date' => null,
+                    'dateImmutable' => null,
+                ],
+                [
+                    'id' => 2,
+                    'name' => 'doe',
+                    'email' => 'test2',
+                    'type' => 'type2',
+                    'date' => '2020-01-01 00:00:00',
+                    'dateImmutable' => '2020-01-01 10:00:00',
+                ],
             ]
         ]);
         $this->assertDatasetEqualsCurrent($expectedDataset);

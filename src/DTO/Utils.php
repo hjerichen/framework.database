@@ -2,6 +2,8 @@
 
 namespace HJerichen\FrameworkDatabase\DTO;
 
+use DateTime;
+use DateTimeImmutable;
 use HJerichen\Framework\Types\Enum;
 use ReflectionClass;
 use ReflectionNamedType;
@@ -39,8 +41,15 @@ class Utils
     private static function convertToCorrectType(ReflectionType|null $type, mixed $value): mixed
     {
         if (!($type instanceof ReflectionNamedType)) return $value;
+
         if (is_subclass_of($type->getName(), Enum::class)) {
             return call_user_func([$type->getName(), 'from'], $value);
+        }
+        if ($type->getName() === DateTime::class || is_subclass_of($type->getName(), DateTime::class)) {
+            return $value === null ? null : new DateTime($value);
+        }
+        if ($type->getName() === DateTimeImmutable::class || is_subclass_of($type->getName(), DateTimeImmutable::class)) {
+            return $value === null ? null : new DateTimeImmutable($value);
         }
         return match ($type->getName()) {
             'int' => $type->allowsNull() && $value === null ? null : (int)$value,

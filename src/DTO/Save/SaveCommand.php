@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace HJerichen\FrameworkDatabase\DTO\Save;
 
+use DateTimeInterface;
 use Doctrine\DBAL\Connection;
 use HJerichen\FrameworkDatabase\DTO\DTO;
 use HJerichen\FrameworkDatabase\DTO\QuoteTableColumnTrait;
@@ -141,10 +142,13 @@ class SaveCommand
         foreach ($objects as $index => $object) {
             foreach ($fields as $field) {
                 $key = $field . '_' . ($index + 1);
-                if (is_bool($object->$field)) {
-                    $parameters[$key] = (int)$object->$field;
+                $value = $object->$field;
+                if ($value instanceof DateTimeInterface) {
+                    $parameters[$key] = $value->format('Y-m-d H:i:s');
+                } elseif (is_bool($value)) {
+                    $parameters[$key] = (int)$value;
                 } else {
-                    $parameters[$key] = $object->$field;
+                    $parameters[$key] = $value;
                 }
             }
         }

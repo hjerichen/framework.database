@@ -2,6 +2,8 @@
 
 namespace HJerichen\FrameworkDatabase\Test\Helpers;
 
+use DateTime;
+use DateTimeImmutable;
 use HJerichen\FrameworkDatabase\DTO\Attributes\Table;
 use HJerichen\FrameworkDatabase\DTO\DTO;
 
@@ -12,4 +14,6 @@ class User1 implements DTO
     public string $name;
     public string $email;
     public UserType $type;
+    public ?DateTime $date;
+    public ?DateTimeImmutable $dateImmutable;
 }
