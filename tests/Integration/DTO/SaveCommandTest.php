@@ -81,6 +81,7 @@ class SaveCommandTest extends DatabaseTestCase
         $user = new User1();
         $user->id = 1;
         $user->name = 'test';
+        $user->email = 'test2';
 
         $this->saveCommand->execute([$user]);
 
@@ -89,7 +90,7 @@ class SaveCommandTest extends DatabaseTestCase
                 [
                     'id' => 1,
                     'name' => 'test',
-                    'email' => 'test1',
+                    'email' => 'test2',
                     'type' => 'type1',
                     'date' => null,
                     'dateImmutable' => null,
