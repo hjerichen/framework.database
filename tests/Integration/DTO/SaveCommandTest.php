@@ -9,7 +9,6 @@ use HJerichen\FrameworkDatabase\Database\Schema\TablesProvider;
 use HJerichen\FrameworkDatabase\DTO\Save\SaveCommand;
 use HJerichen\FrameworkDatabase\Test\DatabaseTestCase;
 use HJerichen\FrameworkDatabase\Test\Helpers\MyTablesProvider;
-use HJerichen\FrameworkDatabase\Test\Helpers\User;
 use HJerichen\FrameworkDatabase\Test\Helpers\User1;
 use HJerichen\FrameworkDatabase\Test\Helpers\UserType;
 
@@ -32,7 +31,7 @@ class SaveCommandTest extends DatabaseTestCase
 
     public function testInsertUsers(): void
     {
-        $user1 = new User();
+        $user1 = new User1();
         $user1->name = 'jon';
         $user1->email = 'test1';
 
@@ -65,6 +64,35 @@ class SaveCommandTest extends DatabaseTestCase
                     'type' => 'type2',
                     'date' => '2020-01-01 00:00:00',
                     'dateImmutable' => '2020-01-01 10:00:00',
+                ],
+            ]
+        ]);
+        $this->assertDatasetEqualsCurrent($expectedDataset);
+    }
+
+    public function testUpdateUser(): void
+    {
+        $user = new User1();
+        $user->name = 'jon';
+        $user->email = 'test1';
+
+        $this->saveCommand->execute([$user]);
+
+        $user = new User1();
+        $user->id = 1;
+        $user->name = 'test';
+
+        $this->saveCommand->execute([$user]);
+
+        $expectedDataset = new DatasetArray([
+            'user' => [
+                [
+                    'id' => 1,
+                    'name' => 'test',
+                    'email' => 'test1',
+                    'type' => 'type1',
+                    'date' => null,
+                    'dateImmutable' => null,
                 ],
             ]
         ]);

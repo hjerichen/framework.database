@@ -22,6 +22,8 @@ class SaveCommand
 
     private TableNameResolver $tableNameResolver;
 
+    /** @var string[][] */
+    private array $allFieldsForTable;
     /** @var DTO[][] */
     private array $groupedObjects;
 
@@ -45,8 +47,11 @@ class SaveCommand
      */
     private function setObjects(array $objects): void
     {
+        $this->allFieldsForTable = [];
         $this->groupedObjects = [];
+
         foreach ($objects as $object) {
+            $this->gatherAllFieldsForTable($object);
             $tableName = $this->getTableName($object);
             $fieldsString = $this->buildFieldsString($object);
             $this->groupedObjects[$tableName][$fieldsString][] = $object;
@@ -56,6 +61,17 @@ class SaveCommand
     protected function getTableName(DTO $object): string
     {
         return $this->tableNameResolver->getTableName($object);
+    }
+
+    private function gatherAllFieldsForTable(DTO $object): void
+    {
+        $tableName = $this->getTableName($object);
+        if (isset($this->allFieldsForTable[$tableName])) return;
+
+        $class = new ReflectionClass($object);
+        foreach ($class->getProperties() as $property) {
+            $this->allFieldsForTable[$tableName][] = $property->name;
+        }
     }
 
     private function buildFieldsString(object $object): string
@@ -98,7 +114,7 @@ class SaveCommand
     {
         $fieldsSQL = $this->buildFieldsSQL($fields);
         $valuesSQL = $this->buildValuesSQL($fields, $objectCount);
-        $duplicateSQL = $this->buildDuplicateSQL($fields);
+        $duplicateSQL = $this->buildDuplicateSQL($tableName, $fields);
         return "
             INSERT INTO {$this->quoteTableName($tableName)}
                 $fieldsSQL
@@ -125,13 +141,20 @@ class SaveCommand
         return implode(', ', $valuesSQLs);
     }
 
-    private function buildDuplicateSQL(array $fields): string
+    private function buildDuplicateSQL(string $tableName, array $fields): string
     {
         $fieldStrings = [];
         foreach ($fields as $field) {
             if ($field === 'id') continue;
             $field = $this->quoteColumnName($field);
             $fieldStrings[] = "$field = VALUES($field)";
+        }
+
+        $missingFields = array_diff($this->allFieldsForTable[$tableName], $fields);
+        foreach ($missingFields as $field) {
+            if ($field === 'id') continue;
+            $field = $this->quoteColumnName($field);
+            $fieldStrings[] = "$field = $field";
         }
         return implode(', ', $fieldStrings);
     }

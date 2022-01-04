@@ -51,7 +51,7 @@ class SaveCommandTest extends TestCase
             VALUES
                 (:name_1, :email_1)
             ON DUPLICATE KEY UPDATE
-                `name` = VALUES(`name`), `email` = VALUES(`email`)
+                `name` = VALUES(`name`), `email` = VALUES(`email`), `active` = `active`, `value` = `value`
         ";
         $expectedParameters = [
             'name_1' => 'jon',
@@ -75,7 +75,7 @@ class SaveCommandTest extends TestCase
             VALUES
                 (:name_1, :email_1)
             ON DUPLICATE KEY UPDATE
-                `name` = VALUES(`name`), `email` = VALUES(`email`)
+                `name` = VALUES(`name`), `email` = VALUES(`email`), `type` = `type`, `date` = `date`, `dateImmutable` = `dateImmutable`
         ";
         $expectedParameters = [
             'name_1' => 'jon',
@@ -103,7 +103,7 @@ class SaveCommandTest extends TestCase
             VALUES
                 (:name_1, :email_1), (:name_2, :email_2)
             ON DUPLICATE KEY UPDATE
-                `name` = VALUES(`name`), `email` = VALUES(`email`)
+                `name` = VALUES(`name`), `email` = VALUES(`email`), `active` = `active`, `value` = `value`
         ";
         $expectedParameters = [
             'name_1' => 'jon',
@@ -141,7 +141,7 @@ class SaveCommandTest extends TestCase
             VALUES
                 (:id_1, :name_1)
             ON DUPLICATE KEY UPDATE
-                `name` = VALUES(`name`)
+                `name` = VALUES(`name`), `active` = `active`, `value` = `value`, `email` = `email`
         ";
         $expectedParameters1 = [
             'id_1' => 33,
@@ -157,7 +157,7 @@ class SaveCommandTest extends TestCase
             VALUES
                 (:name_1, :email_1)
             ON DUPLICATE KEY UPDATE
-                `name` = VALUES(`name`), `email` = VALUES(`email`)
+                `name` = VALUES(`name`), `email` = VALUES(`email`), `active` = `active`, `value` = `value`
         ";
         $expectedParameters2 = [
             'name_1' => 'doe',
@@ -202,7 +202,7 @@ class SaveCommandTest extends TestCase
             VALUES
                 (:name_1, :email_1)
             ON DUPLICATE KEY UPDATE
-                `name` = VALUES(`name`), `email` = VALUES(`email`)
+                `name` = VALUES(`name`), `email` = VALUES(`email`), `active` = `active`, `value` = `value`
         ";
         $expectedParameters2 = [
             'name_1' => 'doe',
@@ -235,7 +235,7 @@ class SaveCommandTest extends TestCase
             VALUES
                 (:name_1, :email_1), (:name_2, :email_2), (:name_3, :email_3)
             ON DUPLICATE KEY UPDATE
-                `name` = VALUES(`name`), `email` = VALUES(`email`)
+                `name` = VALUES(`name`), `email` = VALUES(`email`), `active` = `active`, `value` = `value`
         ";
         $expectedParameters = [
             'name_1' => 'jon',
@@ -277,7 +277,7 @@ class SaveCommandTest extends TestCase
             VALUES
                 (:id_1, :name_1, :email_1), (:id_2, :name_2, :email_2)
             ON DUPLICATE KEY UPDATE
-                `name` = VALUES(`name`), `email` = VALUES(`email`)
+                `name` = VALUES(`name`), `email` = VALUES(`email`), `active` = `active`, `value` = `value`
         ";
         $expectedParameters1 = [
             'id_1' => 1,
@@ -297,7 +297,7 @@ class SaveCommandTest extends TestCase
             VALUES
                 (:name_1, :email_1)
             ON DUPLICATE KEY UPDATE
-                `name` = VALUES(`name`), `email` = VALUES(`email`)
+                `name` = VALUES(`name`), `email` = VALUES(`email`), `active` = `active`, `value` = `value`
         ";
         $expectedParameters2 = [
             'name_1' => 'doe',
@@ -326,7 +326,7 @@ class SaveCommandTest extends TestCase
             VALUES
                 (:name_1, :type_1)
             ON DUPLICATE KEY UPDATE
-                `name` = VALUES(`name`), `type` = VALUES(`type`)
+                `name` = VALUES(`name`), `type` = VALUES(`type`), `email` = `email`, `date` = `date`, `dateImmutable` = `dateImmutable`
         ";
         $expectedParameters = [
             'name_1' => 'jon',
@@ -351,7 +351,7 @@ class SaveCommandTest extends TestCase
             VALUES
                 (:name_1, :date_1, :dateImmutable_1)
             ON DUPLICATE KEY UPDATE
-                `name` = VALUES(`name`), `date` = VALUES(`date`), `dateImmutable` = VALUES(`dateImmutable`)
+                `name` = VALUES(`name`), `date` = VALUES(`date`), `dateImmutable` = VALUES(`dateImmutable`), `email` = `email`, `type` = `type`
         ";
         $expectedParameters = [
             'name_1' => 'jon',
@@ -392,7 +392,7 @@ class SaveCommandTest extends TestCase
             VALUES
                 (:active_1, :name_1), (:active_2, :name_2)
             ON DUPLICATE KEY UPDATE
-                `active` = VALUES(`active`), `name` = VALUES(`name`)
+                `active` = VALUES(`active`), `name` = VALUES(`name`), `logins` = `logins`, `value` = `value`
         ";
         $expectedParameters = [
             'active_1' => 1,

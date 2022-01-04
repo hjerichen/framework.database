@@ -16,8 +16,11 @@ class UserTable1 implements Table
             'unsigned' => true,
             'autoincrement' => true
         ]);
-        $table->addColumn('email', 'string');
+        $table->addColumn('email', 'string', [
+            'notnull' => true
+        ]);
         $table->addColumn('name', 'string');
+//        $table->addColumn('active', Types::BOOLEAN);
         $table->addColumn('date', 'string', [
             'notnull' => false
         ]);

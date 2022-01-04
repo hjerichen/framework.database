@@ -16,7 +16,9 @@ class UserTable2 implements Table
             'unsigned' => true,
             'autoincrement' => true
         ]);
-        $table->addColumn('email', 'string');
+        $table->addColumn('email', 'string', [
+            'notnull' => true
+        ]);
         $table->addColumn('date', 'string', [
             'notnull' => false
         ]);
