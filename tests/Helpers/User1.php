@@ -13,7 +13,7 @@ class User1 implements DTO
     public int $id;
     public string $name;
     public string $email;
-    public UserType $type;
+    public ?UserType $type;
     public ?DateTime $date;
     public ?DateTimeImmutable $dateImmutable;
 }

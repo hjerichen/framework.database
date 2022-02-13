@@ -197,9 +197,8 @@ class UtilsTest extends TestCase
 
         Utils::populateObject($user, $data);
 
-        $expected = true;
         $actual = $user->active;
-        self::assertSame($expected, $actual);
+        self::assertTrue($actual);
     }
 
     public function testPopulateObjectForStringToBoolFalse(): void
@@ -209,9 +208,8 @@ class UtilsTest extends TestCase
 
         Utils::populateObject($user, $data);
 
-        $expected = false;
         $actual = $user->active;
-        self::assertSame($expected, $actual);
+        self::assertFalse($actual);
     }
 
     public function testPopulateObjectForStringToBoolNull(): void
@@ -236,6 +234,17 @@ class UtilsTest extends TestCase
         $expected = UserType::TYPE1();
         $actual = $user->type;
         self::assertEquals($expected, $actual);
+    }
+
+    public function testPopulateObjectForStringToEnumNull(): void
+    {
+        $data = ['type' => null];
+        $user = new User1();
+
+        Utils::populateObject($user, $data);
+
+        $actual = $user->type;
+        self::assertNull($actual);
     }
 
     public function testPopulateObjectForStringToDate(): void

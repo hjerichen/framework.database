@@ -41,21 +41,22 @@ class Utils
     private static function convertToCorrectType(ReflectionType|null $type, mixed $value): mixed
     {
         if (!($type instanceof ReflectionNamedType)) return $value;
+        if ($value === null && $type->allowsNull())  return null;
 
         if (is_subclass_of($type->getName(), Enum::class)) {
             return call_user_func([$type->getName(), 'from'], $value);
         }
         if ($type->getName() === DateTime::class || is_subclass_of($type->getName(), DateTime::class)) {
-            return $value === null ? null : new DateTime($value);
+            return new DateTime($value);
         }
         if ($type->getName() === DateTimeImmutable::class || is_subclass_of($type->getName(), DateTimeImmutable::class)) {
-            return $value === null ? null : new DateTimeImmutable($value);
+            return new DateTimeImmutable($value);
         }
         return match ($type->getName()) {
-            'int' => $type->allowsNull() && $value === null ? null : (int)$value,
-            'bool' => $type->allowsNull() && $value === null ? null : (bool)$value,
-            'float' => $type->allowsNull() && $value === null ? null : (float)$value,
-            'string' => $type->allowsNull() && $value === null ? null : (string)$value,
+            'int' => (int)$value,
+            'bool' => (bool)$value,
+            'float' => (float)$value,
+            'string' => (string)$value,
             default => $value,
         };
     }
