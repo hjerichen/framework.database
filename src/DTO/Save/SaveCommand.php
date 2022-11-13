@@ -168,6 +168,8 @@ class SaveCommand
                 $value = $object->$field;
                 if ($value instanceof DateTimeInterface) {
                     $parameters[$key] = $value->format('Y-m-d H:i:s');
+                } elseif (is_array($value)) {
+                    $parameters[$key] = json_encode($value, JSON_THROW_ON_ERROR);
                 } elseif (is_bool($value)) {
                     $parameters[$key] = (int)$value;
                 } else {

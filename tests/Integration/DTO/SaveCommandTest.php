@@ -34,6 +34,7 @@ class SaveCommandTest extends DatabaseTestCase
         $user1 = new User1();
         $user1->name = 'jon';
         $user1->email = 'test1';
+        $user1->categories = ['cat1', 'cat2'];
 
         $user2 = new User1();
         $user2->name = 'doe';
@@ -56,6 +57,7 @@ class SaveCommandTest extends DatabaseTestCase
                     'type' => 'type1',
                     'date' => null,
                     'dateImmutable' => null,
+                    'categories' => '["cat1","cat2"]',
                 ],
                 [
                     'id' => 2,
@@ -64,6 +66,7 @@ class SaveCommandTest extends DatabaseTestCase
                     'type' => 'type2',
                     'date' => '2020-01-01 00:00:00',
                     'dateImmutable' => '2020-01-01 10:00:00',
+                    'categories' => null,
                 ],
             ]
         ]);

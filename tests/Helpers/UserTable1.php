@@ -4,6 +4,7 @@ namespace HJerichen\FrameworkDatabase\Test\Helpers;
 
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\DBAL\Schema\SchemaException;
+use Doctrine\DBAL\Types\Types;
 use HJerichen\FrameworkDatabase\Database\Schema\Table;
 
 class UserTable1 implements Table
@@ -12,23 +13,27 @@ class UserTable1 implements Table
     public function addToSchema(Schema $schema): void
     {
         $table = $schema->createTable('user');
-        $table->addColumn('id', 'integer', [
+        $table->addColumn('id', Types::INTEGER, [
             'unsigned' => true,
             'autoincrement' => true
         ]);
-        $table->addColumn('email', 'string', [
+        $table->addColumn('email', Types::STRING, [
             'notnull' => true
         ]);
-        $table->addColumn('name', 'string');
-//        $table->addColumn('active', Types::BOOLEAN);
-        $table->addColumn('date', 'string', [
+        $table->addColumn('name', Types::STRING, [
+            'notnull' => true
+        ]);
+        $table->addColumn('date', Types::DATETIME_MUTABLE, [
             'notnull' => false
         ]);
-        $table->addColumn('dateImmutable', 'string', [
+        $table->addColumn('dateImmutable', Types::DATETIME_IMMUTABLE, [
             'notnull' => false
         ]);
-        $table->addColumn('type', 'string', [
+        $table->addColumn('type', Types::STRING, [
             'default' => UserType::TYPE1()
+        ]);
+        $table->addColumn('categories', Types::JSON, [
+            'notnull' => false
         ]);
         $table->setPrimaryKey(['id']);
     }

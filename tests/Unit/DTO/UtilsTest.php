@@ -292,4 +292,27 @@ class UtilsTest extends TestCase
 
         self::assertNull($user->dateImmutable);
     }
+
+    public function testPopulateObjectForJsonStringToArray(): void
+    {
+        $data = ['categories' => json_encode(['cat1', 'cat2'], JSON_THROW_ON_ERROR)];
+        $user = new User1();
+
+        Utils::populateObject($user, $data);
+
+        $expected = ['cat1', 'cat2'];
+        $actual = $user->categories;
+        self::assertEquals($expected, $actual);
+    }
+
+    public function testPopulateObjectForJsonStringToArrayNull(): void
+    {
+        $data = ['categories' => null];
+        $user = new User1();
+
+        Utils::populateObject($user, $data);
+
+        $actual = $user->categories;
+        self::assertNull($actual);
+    }
 }
