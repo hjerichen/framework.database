@@ -36,6 +36,7 @@ class SaveCommandTest extends DatabaseTestCase
         $user1->name = 'jon';
         $user1->email = 'test1';
         $user1->types = new UserTypeCollection([UserType::TYPE1(), UserType::TYPE2()]);
+        $user1->dateImmutable = null;
         $user1->categories = ['cat1', 'cat2'];
 
         $user2 = new User1();

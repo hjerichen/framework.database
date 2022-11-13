@@ -173,7 +173,7 @@ class SaveCommand
         return $parameters;
     }
 
-    private function convertValueForParameter($value): int|float|string
+    private function convertValueForParameter($value): int|float|string|null
     {
         if ($value instanceof Collection) {
             $mapping = fn($value) => $this->convertValueForParameter($value);
@@ -189,7 +189,7 @@ class SaveCommand
         if (is_bool($value)) {
             return (int)$value;
         }
-        if (is_numeric($value)) {
+        if (is_numeric($value) || is_null($value)) {
             return $value;
         }
         return (string)$value;
