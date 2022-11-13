@@ -26,6 +26,9 @@ class UserTable2 implements Table
         $table->addColumn('dateImmutable', Types::DATETIME_IMMUTABLE, [
             'notnull' => false
         ]);
+        $table->addColumn('types', Types::JSON, [
+            'notnull' => false
+        ]);
         $table->addColumn('categories', Types::JSON, [
             'notnull' => false
         ]);

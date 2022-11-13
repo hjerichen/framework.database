@@ -4,6 +4,7 @@ namespace HJerichen\FrameworkDatabase\DTO;
 
 use DateTime;
 use DateTimeImmutable;
+use HJerichen\Collections\Collection;
 use HJerichen\Framework\Types\Enum;
 use ReflectionClass;
 use ReflectionNamedType;
@@ -43,16 +44,29 @@ class Utils
         if (!($type instanceof ReflectionNamedType)) return $value;
         if ($value === null && $type->allowsNull())  return null;
 
-        if (is_subclass_of($type->getName(), Enum::class)) {
-            return call_user_func([$type->getName(), 'from'], $value);
+        return self::convertToCorrectTypeWithName($type->getName(), $value);
+    }
+
+    private static function convertToCorrectTypeWithName(string $typeName, mixed $value): mixed
+    {
+        if (is_subclass_of($typeName, Enum::class)) {
+            return call_user_func([$typeName, 'from'], $value);
         }
-        if ($type->getName() === DateTime::class || is_subclass_of($type->getName(), DateTime::class)) {
+        if (is_subclass_of($typeName, Collection::class)) {
+            $items = json_decode($value, true, 512, JSON_THROW_ON_ERROR);
+            $collection = new $typeName();
+            foreach ($items as $item) {
+                $collection[] = self::convertToCorrectTypeWithName($collection->getType(), $item);
+            }
+            return $collection;
+        }
+        if ($typeName === DateTime::class || is_subclass_of($typeName, DateTime::class)) {
             return new DateTime($value);
         }
-        if ($type->getName() === DateTimeImmutable::class || is_subclass_of($type->getName(), DateTimeImmutable::class)) {
+        if ($typeName === DateTimeImmutable::class || is_subclass_of($typeName, DateTimeImmutable::class)) {
             return new DateTimeImmutable($value);
         }
-        return match ($type->getName()) {
+        return match ($typeName) {
             'int' => (int)$value,
             'bool' => (bool)$value,
             'float' => (float)$value,

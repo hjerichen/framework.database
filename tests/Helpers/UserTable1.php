@@ -32,6 +32,9 @@ class UserTable1 implements Table
         $table->addColumn('type', Types::STRING, [
             'default' => UserType::TYPE1()
         ]);
+        $table->addColumn('types', Types::JSON, [
+            'notnull' => false
+        ]);
         $table->addColumn('categories', Types::JSON, [
             'notnull' => false
         ]);

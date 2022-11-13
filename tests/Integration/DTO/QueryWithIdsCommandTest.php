@@ -11,6 +11,7 @@ use HJerichen\FrameworkDatabase\Test\Helpers\MyTablesProvider;
 use HJerichen\FrameworkDatabase\Test\Helpers\User;
 use HJerichen\FrameworkDatabase\Test\Helpers\User1;
 use HJerichen\FrameworkDatabase\Test\Helpers\UserType;
+use HJerichen\FrameworkDatabase\Test\Helpers\UserTypeCollection;
 
 class QueryWithIdsCommandTest extends DatabaseTestCase
 {
@@ -31,7 +32,7 @@ class QueryWithIdsCommandTest extends DatabaseTestCase
     {
         return new DatasetArray([
             'user' => [
-                ['id' => 1, 'name' => 'jon', 'email' => 'test1@test.de', 'categories' => '["cat1","cat2"]'],
+                ['id' => 1, 'name' => 'jon', 'email' => 'test1@test.de', 'categories' => '["cat1","cat2"]', 'types' => '["type1"]'],
                 ['id' => 2, 'name' => 'doe', 'email' => 'test2@test.de'],
                 ['id' => 3, 'name' => 'doe', 'email' => 'test3@test.de'],
             ]
@@ -76,6 +77,7 @@ class QueryWithIdsCommandTest extends DatabaseTestCase
         $user1->date = null;
         $user1->name = 'jon';
         $user1->type = UserType::TYPE1();
+        $user1->types = new UserTypeCollection([UserType::TYPE1()]);
         $user1->email = 'test1@test.de';
         $user1->categories = ['cat1', 'cat2'];
         $user1->dateImmutable = null;

@@ -9,6 +9,7 @@ namespace HJerichen\FrameworkDatabase\DTO\Save;
 
 use DateTimeInterface;
 use Doctrine\DBAL\Connection;
+use HJerichen\Collections\Collection;
 use HJerichen\FrameworkDatabase\DTO\DTO;
 use HJerichen\FrameworkDatabase\DTO\QuoteTableColumnTrait;
 use HJerichen\FrameworkDatabase\DTO\TableNameResolver\TableNameResolver;
@@ -166,18 +167,32 @@ class SaveCommand
             foreach ($fields as $field) {
                 $key = $field . '_' . ($index + 1);
                 $value = $object->$field;
-                if ($value instanceof DateTimeInterface) {
-                    $parameters[$key] = $value->format('Y-m-d H:i:s');
-                } elseif (is_array($value)) {
-                    $parameters[$key] = json_encode($value, JSON_THROW_ON_ERROR);
-                } elseif (is_bool($value)) {
-                    $parameters[$key] = (int)$value;
-                } else {
-                    $parameters[$key] = $value;
-                }
+                $parameters[$key] = $this->convertValueForParameter($value);
             }
         }
         return $parameters;
+    }
+
+    private function convertValueForParameter($value): int|float|string
+    {
+        if ($value instanceof Collection) {
+            $mapping = fn($value) => $this->convertValueForParameter($value);
+            $values = $value->map($mapping);
+            return json_encode($values, JSON_THROW_ON_ERROR);
+        }
+        if ($value instanceof DateTimeInterface) {
+            return $value->format('Y-m-d H:i:s');
+        }
+        if (is_array($value)) {
+            return json_encode($value, JSON_THROW_ON_ERROR);
+        }
+        if (is_bool($value)) {
+            return (int)$value;
+        }
+        if (is_numeric($value)) {
+            return $value;
+        }
+        return (string)$value;
     }
 
     private function assignIdsToObjects(array $objects): void

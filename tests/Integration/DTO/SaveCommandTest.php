@@ -11,6 +11,7 @@ use HJerichen\FrameworkDatabase\Test\DatabaseTestCase;
 use HJerichen\FrameworkDatabase\Test\Helpers\MyTablesProvider;
 use HJerichen\FrameworkDatabase\Test\Helpers\User1;
 use HJerichen\FrameworkDatabase\Test\Helpers\UserType;
+use HJerichen\FrameworkDatabase\Test\Helpers\UserTypeCollection;
 
 class SaveCommandTest extends DatabaseTestCase
 {
@@ -34,6 +35,7 @@ class SaveCommandTest extends DatabaseTestCase
         $user1 = new User1();
         $user1->name = 'jon';
         $user1->email = 'test1';
+        $user1->types = new UserTypeCollection([UserType::TYPE1(), UserType::TYPE2()]);
         $user1->categories = ['cat1', 'cat2'];
 
         $user2 = new User1();
@@ -57,6 +59,7 @@ class SaveCommandTest extends DatabaseTestCase
                     'type' => 'type1',
                     'date' => null,
                     'dateImmutable' => null,
+                    'types' => '["type1","type2"]',
                     'categories' => '["cat1","cat2"]',
                 ],
                 [
@@ -66,6 +69,7 @@ class SaveCommandTest extends DatabaseTestCase
                     'type' => 'type2',
                     'date' => '2020-01-01 00:00:00',
                     'dateImmutable' => '2020-01-01 10:00:00',
+                    'types' => null,
                     'categories' => null,
                 ],
             ]

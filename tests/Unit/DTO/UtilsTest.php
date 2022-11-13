@@ -9,6 +9,7 @@ use HJerichen\FrameworkDatabase\Test\Helpers\User;
 use HJerichen\FrameworkDatabase\Test\Helpers\User1;
 use HJerichen\FrameworkDatabase\Test\Helpers\User2;
 use HJerichen\FrameworkDatabase\Test\Helpers\UserType;
+use HJerichen\FrameworkDatabase\Test\Helpers\UserTypeCollection;
 use PHPUnit\Framework\TestCase;
 
 class UtilsTest extends TestCase
@@ -313,6 +314,32 @@ class UtilsTest extends TestCase
         Utils::populateObject($user, $data);
 
         $actual = $user->categories;
+        self::assertNull($actual);
+    }
+
+    public function testPopulateObjectForJsonStringToEnumCollection(): void
+    {
+        $data = ['types' => '["type1","type2"]'];
+        $user = new User1();
+
+        Utils::populateObject($user, $data);
+
+        $expected = new UserTypeCollection([
+            UserType::TYPE1(),
+            UserType::TYPE2(),
+        ]);
+        $actual = $user->types;
+        self::assertEquals($expected, $actual);
+    }
+
+    public function testPopulateObjectForJsonStringToEnumCollectionNull(): void
+    {
+        $data = ['types' => null];
+        $user = new User1();
+
+        Utils::populateObject($user, $data);
+
+        $actual = $user->types;
         self::assertNull($actual);
     }
 }

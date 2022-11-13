@@ -12,6 +12,7 @@
     "require": {
         "php": "^8.0",
         "ext-pdo": "*",
+        "hjerichen/collections": "1.2.0",
         "hjerichen/framework": "^0.2.6",
         "doctrine/dbal": "^3.1"
     },
