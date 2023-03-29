@@ -18,6 +18,7 @@ use PDO;
 use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\TestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
+use RuntimeException;
 use SebastianBergmann\Comparator\ComparisonFailure;
 
 class DatabaseTestCase extends TestCase
@@ -47,10 +48,12 @@ class DatabaseTestCase extends TestCase
         return $configuration->reveal();
     }
 
-    /** @noinspection PhpPossiblePolymorphicInvocationInspection */
     protected function getDatabase(): PDO
     {
-        return $this->connection->getWrappedConnection()->getWrappedConnection();
+        $database = $this->connection->getNativeConnection();
+        if ($database instanceof PDO) return $database;
+
+        throw new RuntimeException('Only PDO as connection supported');
     }
 
     protected function getDatasetForSetup(): Dataset

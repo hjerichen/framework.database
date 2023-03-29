@@ -12,8 +12,8 @@ use HJerichen\ClassInstantiator\Attribute\Instantiator;
 class SchemaProvider
 {
     public function __construct(
-        private Connection $database,
-        private TablesProvider $tablesProvider,
+        private readonly Connection $database,
+        private readonly TablesProvider $tablesProvider,
     ) {
     }
 
@@ -29,6 +29,6 @@ class SchemaProvider
     /** @throws Exception */
     public function getCurrentSchema(): Schema
     {
-        return $this->database->createSchemaManager()->createSchema();
+        return $this->database->createSchemaManager()->introspectSchema();
     }
 }

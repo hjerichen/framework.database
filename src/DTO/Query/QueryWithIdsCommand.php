@@ -1,9 +1,4 @@
-<?php
-/**
- * @noinspection SqlResolve
- * @noinspection UnknownInspectionInspection
- */
-declare(strict_types=1);
+<?php declare(strict_types=1);
 
 namespace HJerichen\FrameworkDatabase\DTO\Query;
 
@@ -13,9 +8,10 @@ use HJerichen\FrameworkDatabase\DTO\DTO;
 class QueryWithIdsCommand extends QueryCommandAbstract
 {
     /**
-     * @param string $class Should implement DTO interface.
+     * @template T of DTO
+     * @param class-string<T> $class Should implement DTO interface.
      * @param int[] $ids
-     * @return DTO[]
+     * @return T[]
      * @throws Exception
      */
     public function execute(string $class, array $ids): array
@@ -27,9 +23,10 @@ class QueryWithIdsCommand extends QueryCommandAbstract
     }
 
     /**
-     * @param string $class Should extend DTO interface.
-     * @param int $ids
-     * @return DTO
+     * @template T of DTO
+     * @param class-string<T> $class Should extend DTO interface.
+     * @param int $id
+     * @return T|null
      * @throws Exception
      */
     public function executeForOne(string $class, int $id): ?object

@@ -29,11 +29,12 @@ abstract class QueryCommandAbstract
     }
 
     /**
-     * @param string $class Should implement DTO interface.
+     * @template T of DTO
+     * @param class-string<T> $class Should implement DTO interface.
      * @param string $sql
      * @param array<string, mixed> $parameters
      * @param string|null $groupBy
-     * @return DTO[]|DTO[][] Depending on group by is set.
+     * @return T[]|T[][] Depending on group by is set.
      * @throws Exception
      */
     protected function executeForSQL(string $class, string $sql, array $parameters = [], string|null $groupBy = null): array

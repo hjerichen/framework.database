@@ -4,6 +4,7 @@ namespace HJerichen\FrameworkDatabase\Database\Schema;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Exception;
+use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Platforms\MySQLPlatform;
 use Doctrine\DBAL\Schema\Comparator;
 use HJerichen\FrameworkDatabase\ObjectFactory;
@@ -13,10 +14,18 @@ use Throwable;
 #[Instantiator(ObjectFactory::class)]
 class SchemaSynchronizer
 {
+    private AbstractPlatform $platform;
+
     public function __construct(
-        private Connection $database,
-        private SchemaProvider $schemaProvider,
+        private readonly Connection $database,
+        private readonly SchemaProvider $schemaProvider,
     ) {
+        $this->platform = new MySQLPlatform();
+    }
+
+    public function setPlatform(AbstractPlatform $platform): void
+    {
+        $this->platform = $platform;
     }
 
     /**
@@ -39,8 +48,8 @@ class SchemaSynchronizer
         $wantedSchema =  $this->schemaProvider->getWantedSchema();
         $comparator = new Comparator();
 
-        $diff = $comparator->compare($currentSchema, $wantedSchema);
-        return $diff->toSql(new MySQLPlatform());
+        $diff = $comparator->compareSchemas($currentSchema, $wantedSchema);
+        return $this->platform->getAlterSchemaSQL($diff);
     }
 
     /**

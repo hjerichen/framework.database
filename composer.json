@@ -10,17 +10,17 @@
         }
     ],
     "require": {
-        "php": "^8.0",
+        "php": "^8.1",
         "ext-pdo": "*",
-        "hjerichen/collections": "1.2.0",
-        "hjerichen/framework": "^0.2.6",
+        "hjerichen/collections": "^1.2.1",
+        "hjerichen/framework": "^0.3.0",
         "doctrine/dbal": "^3.1"
     },
     "require-dev": {
         "roave/security-advisories": "dev-master",
-        "phpunit/phpunit": "^9.5",
+        "phpunit/phpunit": "^9.6",
         "phpspec/prophecy-phpunit": "^2.0",
-        "hjerichen/dbunit": "^0.1.1"
+        "hjerichen/dbunit": "^0.1.4"
     },
     "autoload": {
         "psr-4": {

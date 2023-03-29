@@ -9,7 +9,7 @@ use ReflectionClass;
 class TableNameResolverAttribute implements TableNameResolver
 {
     public function __construct(
-        private TableNameResolver $tableNameResolver
+        private readonly TableNameResolver $tableNameResolver
     ) {
     }
 
@@ -26,7 +26,6 @@ class TableNameResolverAttribute implements TableNameResolver
         $class = new ReflectionClass($object);
         $attribute = $class->getAttributes(Table::class)[0] ?? null;
 
-        /** @noinspection PhpIncompatibleReturnTypeInspection */
         return $attribute ? $attribute->newInstance() : null;
     }
 }

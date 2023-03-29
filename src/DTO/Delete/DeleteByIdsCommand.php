@@ -22,7 +22,7 @@ class DeleteByIdsCommand
     }
 
     /**
-     * @param string $class Should implement DTO interface.
+     * @param class-string $class Should implement DTO interface.
      * @param int[] $ids
      * @return DTO[]
      * @throws Exception

@@ -1,8 +1,5 @@
 <?php
-/**
- * @noinspection UnknownInspectionInspection
- * @noinspection SqlResolve
- */
+/** @noinspection DuplicatedCode */
 declare(strict_types=1);
 
 namespace HJerichen\FrameworkDatabase\Test\Integration\DTO;

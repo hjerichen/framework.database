@@ -15,7 +15,7 @@ class ConnectionProvider
     private static Connection|null $connection = null;
 
     public function __construct(
-        private Configuration $configuration
+        private readonly Configuration $configuration
     ) {
     }
 
@@ -23,9 +23,9 @@ class ConnectionProvider
     public function getConnection(): Connection
     {
         if (self::$connection === null) {
-            $connectionParams = array(
+            $connectionParams = [
                 'url' => $this->configuration->getDatabaseUrl()
-            );
+            ];
             self::$connection = DriverManager::getConnection($connectionParams);
             self::$connection->connect();
         }
@@ -34,9 +34,7 @@ class ConnectionProvider
 
     public function setConnection(Connection|null $connection): void
     {
-        if (self::$connection) {
-            self::$connection->close();
-        }
+        self::$connection?->close();
         self::$connection = $connection;
     }
 }

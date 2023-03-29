@@ -7,7 +7,7 @@ use HJerichen\Framework\Configuration\Configuration as FrameworkConfiguration;
 class Configuration
 {
     public function __construct(
-        private FrameworkConfiguration $configuration
+        private readonly FrameworkConfiguration $configuration
     ) {
     }
 

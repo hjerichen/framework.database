@@ -43,8 +43,7 @@ class DatabaseConnectionTest extends TestCase
 
     public function testFetchingPDOInstance(): void
     {
-        /** @noinspection PhpPossiblePolymorphicInvocationInspection */
-        $actual = $this->connection->getWrappedConnection()->getWrappedConnection();
+        $actual = $this->connection->getNativeConnection();
         self::assertInstanceOf(PDO::class, $actual);
     }
 }

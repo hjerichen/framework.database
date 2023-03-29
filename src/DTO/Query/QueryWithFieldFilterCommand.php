@@ -8,9 +8,10 @@ use HJerichen\FrameworkDatabase\DTO\DTO;
 class QueryWithFieldFilterCommand extends QueryCommandAbstract
 {
     /**
-     * @param string $class Should implement DTO interface.
+     * @template T of DTO
+     * @param class-string<T> $class Should implement DTO interface.
      * @param array<string, mixed> $fieldFilter
-     * @return DTO[]
+     * @return T[]
      * @throws Exception
      */
     public function execute(string $class, array $fieldFilter = []): array

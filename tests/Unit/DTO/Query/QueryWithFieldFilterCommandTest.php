@@ -1,8 +1,5 @@
 <?php
-/**
- * @noinspection UnknownInspectionInspection
- * @noinspection SqlResolve
- */
+/** @noinspection PhpRedundantOptionalArgumentInspection */
 declare(strict_types=1);
 
 namespace HJerichen\FrameworkDatabase\Test\Unit\DTO\Query;
