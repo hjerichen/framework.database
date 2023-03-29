@@ -14,7 +14,8 @@ class ConfigurationTest extends TestCase
     use ProphecyTrait;
 
     private Configuration $configuration;
-    private ObjectProphecy|FrameworkConfiguration $frameworkConfiguration;
+    /** @var ObjectProphecy<FrameworkConfiguration> */
+    private ObjectProphecy $frameworkConfiguration;
 
     protected function setUp(): void
     {
@@ -44,8 +45,9 @@ class ConfigurationTest extends TestCase
             ->getCustomValue('database-url')
             ->willReturn(null);
 
+        $expected = '';
         $actual = $this->configuration->getDatabaseUrl();
-        self::assertNull($actual);
+        self::assertEquals($expected, $actual);
     }
 
     public function testGetSchemaTablesProviderClass(): void

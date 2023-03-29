@@ -3,6 +3,7 @@
 namespace HJerichen\FrameworkDatabase\DTO\Query;
 
 use Doctrine\DBAL\Exception;
+use Doctrine\DBAL\Result;
 use HJerichen\FrameworkDatabase\DTO\DTO;
 
 class QueryGroupedWithSQLCommand extends QueryCommandAbstract
@@ -24,6 +25,25 @@ class QueryGroupedWithSQLCommand extends QueryCommandAbstract
      */
     public function execute(string $class, string $sql, array $parameters = []): array
     {
-        return $this->executeForSQL($class, $sql, $parameters, $this->groupBy);
+        $result = $this->connection->executeQuery($sql, $parameters);
+        return $this->buildDTOs($class, $result);
+    }
+
+    /**
+     * @template T of DTO
+     * @param class-string<T> $class
+     * @param Result $result
+     * @return T[][]
+     * @throws Exception
+     */
+    private function buildDTOs(string $class, Result $result): array
+    {
+        $objects = [];
+        foreach ($result->iterateAssociative() as $data) {
+            /** @var string $group */
+            $group = $data[$this->groupBy] ?? '';
+            $objects[$group][] = $this->buildDTO($class, $data);
+        }
+        return $objects;
     }
 }

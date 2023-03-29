@@ -41,12 +41,16 @@ class SchemaSynchronizer
         return $queries;
     }
 
-    /** @throws Exception */
+    /**
+     * @return string[]
+     * @throws Exception
+     */
     public function calculateQueries(): array
     {
         $currentSchema = $this->schemaProvider->getCurrentSchema();
         $wantedSchema =  $this->schemaProvider->getWantedSchema();
-        $comparator = new Comparator();
+        /** @psalm-suppress InternalMethod */
+        $comparator = new Comparator($this->platform);
 
         $diff = $comparator->compareSchemas($currentSchema, $wantedSchema);
         return $this->platform->getAlterSchemaSQL($diff);

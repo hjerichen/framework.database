@@ -20,7 +20,6 @@ abstract class QueryCommandAbstract
     }
 
     private TableNameResolver $tableNameResolver;
-    private string|null $groupBy = null;
 
     public function __construct(
         protected Connection $connection
@@ -33,14 +32,11 @@ abstract class QueryCommandAbstract
      * @param class-string<T> $class Should implement DTO interface.
      * @param string $sql
      * @param array<string, mixed> $parameters
-     * @param string|null $groupBy
-     * @return T[]|T[][] Depending on group by is set.
+     * @return T[]
      * @throws Exception
      */
-    protected function executeForSQL(string $class, string $sql, array $parameters = [], string|null $groupBy = null): array
+    protected function executeForSQL(string $class, string $sql, array $parameters = []): array
     {
-        $this->groupBy = $groupBy;
-
         $result = $this->connection->executeQuery($sql, $parameters);
         return $this->buildDTOs($class, $result);
     }
@@ -50,19 +46,32 @@ abstract class QueryCommandAbstract
         return $this->tableNameResolver->getTableName($class);
     }
 
+    /**
+     * @template T of DTO
+     * @param class-string<T> $class
+     * @param Result $result
+     * @return T[]
+     * @throws Exception
+     */
     private function buildDTOs(string $class, Result $result): array
     {
         $objects = [];
         foreach ($result->iterateAssociative() as $data) {
-            $object = new $class;
-            if ($this->groupBy !== null) {
-                $group = $data[$this->groupBy] ?? '';
-                $objects[$group][] = $object;
-            } else {
-                $objects[] = $object;
-            }
-            Utils::populateObject($object, $data);
+            $objects[] = $this->buildDTO($class, $data);
         }
         return $objects;
+    }
+
+    /**
+     * @template T of DTO
+     * @param class-string<T> $class
+     * @param array<string,mixed> $data
+     * @return T
+     */
+    protected function buildDTO(string $class, array $data): DTO
+    {
+        $object = new $class;
+        Utils::populateObject($object, $data);
+        return $object;
     }
 }

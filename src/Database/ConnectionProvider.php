@@ -27,6 +27,7 @@ class ConnectionProvider
                 'url' => $this->configuration->getDatabaseUrl()
             ];
             self::$connection = DriverManager::getConnection($connectionParams);
+            /** @psalm-suppress InternalMethod */
             self::$connection->connect();
         }
         return self::$connection;

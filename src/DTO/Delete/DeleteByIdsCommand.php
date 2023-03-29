@@ -22,9 +22,10 @@ class DeleteByIdsCommand
     }
 
     /**
-     * @param class-string $class Should implement DTO interface.
+     *
+     * @param class-string<DTO> $class Should implement DTO interface.
      * @param int[] $ids
-     * @return DTO[]
+     * @return int
      * @throws Exception
      */
     public function execute(string $class, array $ids): int
@@ -63,18 +64,18 @@ class DeleteByIdsCommand
 
     private function buildValuesString(array $ids): string
     {
-        $values = array_map(static fn() => '?', $ids);
+        $values = array_fill(start_index: 0, count: count($ids), value: '?');
         return implode(', ', $values);
     }
 
     /**
      * @param string $sql
-     * @param array<string, mixed> $parameters
+     * @param int[] $ids
      * @return int
      * @throws Exception
      */
-    protected function executeForSQL(string $sql, array $parameters = []): int
+    private function executeForSQL(string $sql, array $ids = []): int
     {
-        return $this->connection->executeStatement($sql, $parameters);
+        return (int)$this->connection->executeStatement($sql, $ids);
     }
 }

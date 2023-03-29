@@ -20,6 +20,7 @@ class QueryWithFieldFilterCommand extends QueryCommandAbstract
         return $this->executeForSQL($class, $sql, $fieldFilter);
     }
 
+    /** @param array<string, mixed> $fieldFilter */
     private function buildQuery(string $class, array $fieldFilter): string
     {
         $tableName = $this->getTableName($class);
@@ -31,10 +32,14 @@ class QueryWithFieldFilterCommand extends QueryCommandAbstract
         return "$sql WHERE " . implode(' AND ', $wheres);
     }
 
+    /**
+     * @param array<string, mixed> $parameters
+     * @return list<string>
+     */
     private function buildWheres(array $parameters): array
     {
         $wheres = [];
-        foreach ($parameters as $key => $value) {
+        foreach (array_keys($parameters) as $key) {
             $wheres[] = "{$this->quoteColumnName($key)} = :$key";
         }
         return $wheres;

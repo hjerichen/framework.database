@@ -11,13 +11,14 @@ class Configuration
     ) {
     }
 
-    public function getDatabaseUrl(): ?string
+    public function getDatabaseUrl(): string
     {
-        return $this->configuration->getCustomValue('database-url');
+        return (string)$this->configuration->getCustomValue('database-url');
     }
 
     public function getSchemaTablesProviderClass(): ?string
     {
-        return $this->configuration->getCustomValue('database-schema-tables-provider');
+        $class = (string)$this->configuration->getCustomValue('database-schema-tables-provider');
+        return $class ?: null;
     }
 }
