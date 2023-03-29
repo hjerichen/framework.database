@@ -20,11 +20,17 @@
         "roave/security-advisories": "dev-master",
         "phpunit/phpunit": "^9.6",
         "phpspec/prophecy-phpunit": "^2.0",
-        "hjerichen/dbunit": "^0.1.4"
+        "hjerichen/dbunit": "^0.1.4",
+        "vimeo/psalm": "^5.8",
+        "psalm/plugin-phpunit": "^0.18.4"
     },
     "autoload": {
         "psr-4": {
-            "HJerichen\\FrameworkDatabase\\": "src/",
+            "HJerichen\\FrameworkDatabase\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
             "HJerichen\\FrameworkDatabase\\Test\\": "tests/"
         }
     }
