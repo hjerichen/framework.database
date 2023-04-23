@@ -18,7 +18,8 @@ class QueryWithFieldFilterCommandTest extends TestCase
     use ProphecyTrait;
 
     private QueryWithFieldFilterCommand $queryCommand;
-    private ObjectProphecy|Connection $connection;
+    /** @var ObjectProphecy<Connection> */
+    private ObjectProphecy $connection;
 
     protected function setUp(): void
     {

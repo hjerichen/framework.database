@@ -31,7 +31,7 @@ abstract class QueryCommandAbstract
      * @template T of DTO
      * @param class-string<T> $class Should implement DTO interface.
      * @param string $sql
-     * @param array<string, mixed> $parameters
+     * @param list<mixed>|array<string,mixed> $parameters
      * @return T[]
      * @throws Exception
      */
@@ -41,6 +41,7 @@ abstract class QueryCommandAbstract
         return $this->buildDTOs($class, $result);
     }
 
+    /** @param class-string $class */
     protected function getTableName(string $class): string
     {
         return $this->tableNameResolver->getTableName($class);

@@ -9,10 +9,12 @@ use HJerichen\FrameworkDatabase\Database\Schema\TablesProvider;
 use HJerichen\FrameworkDatabase\Database\Schema\TablesProviderEmpty;
 use RuntimeException;
 
+/** @psalm-api */
 class ObjectFactory extends FrameworkObjectFactory
 {
     public function getDatabase(): Connection
     {
+        /** @var ConnectionProvider $provider */
         $provider = $this->instantiateClass(ConnectionProvider::class);
         return $provider->getConnection();
     }

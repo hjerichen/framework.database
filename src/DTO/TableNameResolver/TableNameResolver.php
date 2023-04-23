@@ -6,5 +6,6 @@ use HJerichen\FrameworkDatabase\DTO\DTO;
 
 interface TableNameResolver
 {
+    /** @param DTO|class-string $objectOrClass */
     public function getTableName(DTO|string $objectOrClass): string;
 }

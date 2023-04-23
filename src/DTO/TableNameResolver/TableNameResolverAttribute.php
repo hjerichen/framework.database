@@ -13,6 +13,7 @@ class TableNameResolverAttribute implements TableNameResolver
     ) {
     }
 
+    /** @param DTO|class-string $objectOrClass */
     public function getTableName(DTO|string $objectOrClass): string
     {
         $tableAttribute = $this->getAttribute($objectOrClass);
@@ -21,6 +22,11 @@ class TableNameResolverAttribute implements TableNameResolver
         return $this->tableNameResolver->getTableName($objectOrClass);
     }
 
+    /**
+     * @param DTO|class-string $object
+     * @noinspection PhpDocMissingThrowsInspection
+     * @noinspection PhpDocSignatureIsNotCompleteInspection
+     */
     private function getAttribute(DTO|string $object): ?Table
     {
         $class = new ReflectionClass($object);

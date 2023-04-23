@@ -256,7 +256,7 @@ class UtilsTest extends TestCase
         Utils::populateObject($user, $data);
 
         $expected = '01.10.2020 08:00:00';
-        $actual = $user->date->format('d.m.Y H:i:s');
+        $actual = $user->date?->format('d.m.Y H:i:s');
         self::assertInstanceOf(DateTime::class, $user->date);
         self::assertEquals($expected, $actual);
     }
@@ -279,7 +279,7 @@ class UtilsTest extends TestCase
         Utils::populateObject($user, $data);
 
         $expected = '01.10.2020 08:00:00';
-        $actual = $user->dateImmutable->format('d.m.Y H:i:s');
+        $actual = $user->dateImmutable?->format('d.m.Y H:i:s');
         self::assertInstanceOf(DateTimeImmutable::class, $user->dateImmutable);
         self::assertEquals($expected, $actual);
     }

@@ -21,7 +21,8 @@ class QueryWithIdsCommandTest extends TestCase
     use  ProphecyTrait;
 
     private QueryWithIdsCommand $queryCommand;
-    private ObjectProphecy|Connection $connection;
+    /** @var ObjectProphecy<Connection> */
+    private ObjectProphecy $connection;
 
     protected function setUp(): void
     {

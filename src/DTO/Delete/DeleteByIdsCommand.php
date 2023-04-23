@@ -36,6 +36,7 @@ class DeleteByIdsCommand
         return $this->executeForSQL($sql, $ids);
     }
 
+    /** @param class-string $class */
     private function buildSQL(string $class, array $ids): string
     {
         $tableName = $this->getTableName($class);
@@ -44,6 +45,7 @@ class DeleteByIdsCommand
             $this->buildSQLMulti($tableName, $ids);
     }
 
+    /** @param class-string $class */
     private function getTableName(string $class): string
     {
         return $this->tableNameResolver->getTableName($class);

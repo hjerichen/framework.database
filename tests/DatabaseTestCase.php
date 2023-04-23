@@ -40,7 +40,10 @@ class DatabaseTestCase extends TestCase
         $this->setUpDatabase();
     }
 
-    /** @noinspection PhpUndefinedConstantInspection */
+    /**
+     * @noinspection PhpUndefinedConstantInspection
+     * @psalm-suppress UndefinedConstant
+     */
     protected function getConfiguration(): Configuration
     {
         $configuration = $this->prophesize(Configuration::class);
@@ -74,6 +77,10 @@ class DatabaseTestCase extends TestCase
         return new TablesProviderEmpty();
     }
 
+    /**
+     * @psalm-suppress InternalClass
+     * @psalm-suppress InternalMethod
+     */
     protected function assertDatasetEqualsCurrent(Dataset $expected): void
     {
         try {

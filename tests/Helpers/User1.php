@@ -7,6 +7,9 @@ use DateTimeImmutable;
 use HJerichen\FrameworkDatabase\DTO\Attributes\Table;
 use HJerichen\FrameworkDatabase\DTO\DTO;
 
+/**
+ * @psalm-suppress PossiblyUnusedProperty
+ */
 #[Table("user")]
 class User1 implements DTO
 {

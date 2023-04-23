@@ -15,7 +15,8 @@ class DeleteByIdsCommandTest extends TestCase
     use  ProphecyTrait;
 
     private DeleteByIdsCommand $command;
-    private ObjectProphecy|Connection $connection;
+    /** @var ObjectProphecy<Connection> */
+    private ObjectProphecy $connection;
 
     protected function setUp(): void
     {

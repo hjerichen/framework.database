@@ -17,9 +17,12 @@ class CLIControllerTest extends TestCase
     use ProphecyTrait;
 
     private CLIController $controller;
-    private ObjectProphecy|SchemaSynchronizer $schemaSynchronizer;
-    private ObjectProphecy|SchemaProvider $schemaProvider;
-    private ObjectProphecy|Schema $schema;
+    /** @var ObjectProphecy<SchemaSynchronizer> */
+    private ObjectProphecy $schemaSynchronizer;
+    /** @var ObjectProphecy<SchemaProvider> */
+    private ObjectProphecy $schemaProvider;
+    /** @var ObjectProphecy<Schema> */
+    private ObjectProphecy $schema;
 
     protected function setUp(): void
     {

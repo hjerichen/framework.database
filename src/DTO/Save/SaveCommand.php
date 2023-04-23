@@ -20,7 +20,7 @@ class SaveCommand
 
     /** @var string[][] */
     private array $allFieldsForTable;
-    /** @var DTO[][] */
+    /** @var array<string,array<string,list<DTO>>> */
     private array $groupedObjects;
 
     public function __construct(
@@ -85,7 +85,7 @@ class SaveCommand
     private function saveObjects(): void
     {
         foreach ($this->groupedObjects as $tableName => $groupedObjects) {
-            foreach ($groupedObjects as $fieldsString => $objects) {
+            foreach (array_keys($groupedObjects) as $fieldsString) {
                 $this->saveObjectsForTable($tableName, $fieldsString);
             }
         }
@@ -106,27 +106,30 @@ class SaveCommand
         }
     }
 
+    /** @param string[] $fields */
     private function buildSQL(string $tableName, array $fields, int $objectCount): string
     {
         $fieldsSQL = $this->buildFieldsSQL($fields);
         $valuesSQL = $this->buildValuesSQL($fields, $objectCount);
         $duplicateSQL = $this->buildDuplicateSQL($tableName, $fields);
-        return "
+        return <<<SQL
             INSERT INTO {$this->quoteTableName($tableName)}
                 $fieldsSQL
             VALUES
                 $valuesSQL
             ON DUPLICATE KEY UPDATE
                 $duplicateSQL
-        ";
+            SQL;
     }
 
+    /** @param string[] $fields */
     private function buildFieldsSQL(array $fields): string
     {
         $fields = array_map([$this, 'quoteColumnName'], $fields);
         return '(' . implode(', ', $fields) . ')';
     }
 
+    /** @param string[] $fields */
     private function buildValuesSQL(array $fields, int $objectCount): string
     {
         $valuesSQLs = [];
@@ -137,6 +140,7 @@ class SaveCommand
         return implode(', ', $valuesSQLs);
     }
 
+    /** @param string[] $fields */
     private function buildDuplicateSQL(string $tableName, array $fields): string
     {
         $fieldStrings = [];
@@ -155,12 +159,19 @@ class SaveCommand
         return implode(', ', $fieldStrings);
     }
 
+    /**
+     * @param string[] $fields
+     * @param list<DTO> $objects
+     * @return array<string,int|float|string|null>
+     * @noinspection PhpDocMissingThrowsInspection
+     */
     private function buildParameters(array $fields, array $objects): array
     {
         $parameters = [];
         foreach ($objects as $index => $object) {
             foreach ($fields as $field) {
                 $key = $field . '_' . ($index + 1);
+                /** @var mixed $value */
                 $value = $object->$field;
                 $parameters[$key] = $this->convertValueForParameter($value);
             }
@@ -168,10 +179,10 @@ class SaveCommand
         return $parameters;
     }
 
-    private function convertValueForParameter($value): int|float|string|null
+    private function convertValueForParameter(mixed $value): int|float|string|null
     {
         if ($value instanceof Collection) {
-            $mapping = fn($value) => $this->convertValueForParameter($value);
+            $mapping = fn(mixed $value): int|float|string|null => $this->convertValueForParameter($value);
             $values = $value->map($mapping);
             return json_encode($values, JSON_THROW_ON_ERROR);
         }
@@ -190,9 +201,14 @@ class SaveCommand
         return (string)$value;
     }
 
+    /**
+     * @param list<DTO> $objects
+     * @noinspection PhpDocMissingThrowsInspection
+     */
     private function assignIdsToObjects(array $objects): void
     {
         $id = (int)$this->connection->lastInsertId();
+        /** @psalm-suppress NoInterfaceProperties */
         foreach ($objects as $object) {
             $object->id = $id++;
         }

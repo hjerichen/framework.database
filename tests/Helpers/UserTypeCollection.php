@@ -11,6 +11,7 @@ use HJerichen\Collections\ObjectCollection;
  */
 class UserTypeCollection extends ObjectCollection
 {
+    /** @param UserType[] $items */
     public function __construct(
         array $items = []
     ) {

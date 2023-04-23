@@ -20,7 +20,10 @@ class QueryWithFieldFilterCommand extends QueryCommandAbstract
         return $this->executeForSQL($class, $sql, $fieldFilter);
     }
 
-    /** @param array<string, mixed> $fieldFilter */
+    /**
+     * @param class-string $class
+     * @param array<string,mixed> $fieldFilter
+     */
     private function buildQuery(string $class, array $fieldFilter): string
     {
         $tableName = $this->getTableName($class);

@@ -4,6 +4,9 @@ namespace HJerichen\FrameworkDatabase\Test\Helpers;
 
 use HJerichen\FrameworkDatabase\DTO\DTO;
 
+/**
+ * @psalm-suppress PossiblyUnusedProperty
+ */
 class User2 implements DTO
 {
     public int $id;

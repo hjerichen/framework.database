@@ -17,7 +17,10 @@ class DatabaseConnectionTest extends TestCase
     private ConnectionProvider $connectionProvider;
     private Connection $connection;
 
-    /** @noinspection PhpUndefinedConstantInspection */
+    /**
+     * @noinspection PhpUndefinedConstantInspection
+     * @psalm-suppress UndefinedConstant
+     */
     protected function setUp(): void
     {
         parent::setUp();

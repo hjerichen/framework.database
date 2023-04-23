@@ -8,6 +8,8 @@ use HJerichen\Framework\Types\Enum;
 /**
  * @method static TYPE1()
  * @method static TYPE2()
+ * @psalm-immutable
+ * @template-extends Enum<string>
  */
 class UserType extends Enum
 {

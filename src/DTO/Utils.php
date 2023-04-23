@@ -12,6 +12,7 @@ use ReflectionType;
 
 class Utils
 {
+    /** @psalm-suppress MixedAssignment */
     public static function convertObjectToArray(DTO $object): array
     {
         $class = new ReflectionClass($object);
@@ -25,6 +26,7 @@ class Utils
         return $array;
     }
 
+    /** @psalm-suppress MixedAssignment */
     public static function populateObject(DTO $object, array $data): void
     {
         $class = new ReflectionClass($object);
@@ -47,6 +49,11 @@ class Utils
         return self::convertToCorrectTypeWithName($type->getName(), $value);
     }
 
+    /**
+     * @psalm-suppress UnsafeInstantiation
+     * @psalm-suppress MixedAssignment
+     * @psalm-suppress MixedArgument
+     */
     private static function convertToCorrectTypeWithName(string $typeName, mixed $value): mixed
     {
         if (is_subclass_of($typeName, Enum::class)) {

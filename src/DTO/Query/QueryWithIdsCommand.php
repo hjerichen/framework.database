@@ -36,6 +36,7 @@ class QueryWithIdsCommand extends QueryCommandAbstract
         return $result[0] ?? null;
     }
 
+    /** @param class-string $class */
     private function buildSQL(string $class, array $ids): string
     {
         $tableName = $this->getTableName($class);
@@ -59,6 +60,7 @@ class QueryWithIdsCommand extends QueryCommandAbstract
 
     private function buildValuesString(array $ids): string
     {
+        /** @psalm-suppress TooManyArguments */
         $values = array_map(static fn() => '?', $ids);
         return implode(', ', $values);
     }

@@ -4,6 +4,7 @@ namespace HJerichen\FrameworkDatabase\Test\Unit;
 
 use HJerichen\Framework\Configuration\Configuration as FrameworkConfiguration;
 use HJerichen\FrameworkDatabase\Configuration;
+use HJerichen\FrameworkDatabase\Database\Schema\TablesProvider;
 use HJerichen\FrameworkDatabase\Test\Helpers\MyTablesProvider;
 use PHPUnit\Framework\TestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
@@ -70,5 +71,29 @@ class ConfigurationTest extends TestCase
 
         $actual = $this->configuration->getSchemaTablesProviderClass();
         self::assertNull($actual);
+    }
+
+    public function testGetSchemaTablesProviderClassForIsNotClass(): void
+    {
+        $this->frameworkConfiguration
+            ->getCustomValue('database-schema-tables-provider')
+            ->willReturn('SOME');
+
+        $this->expectExceptionMessage("Class SOME does not exist.");
+
+        $this->configuration->getSchemaTablesProviderClass();
+    }
+
+    public function testGetSchemaTablesProviderClassForWrongClass(): void
+    {
+        $this->frameworkConfiguration
+            ->getCustomValue('database-schema-tables-provider')
+            ->willReturn(self::class);
+
+        $class = self::class;
+        $interface = TablesProvider::class;
+        $this->expectExceptionMessage("Class $class does not implements $interface.");
+
+        $this->configuration->getSchemaTablesProviderClass();
     }
 }

@@ -41,6 +41,7 @@ class CLIController
         return $this->createResponseForQueries($queries);
     }
 
+    /** @param string[] $queries */
     private function createResponseForQueries(array $queries): Response
     {
         $sql = implode("\n", $queries);

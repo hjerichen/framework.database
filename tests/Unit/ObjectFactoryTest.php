@@ -19,7 +19,8 @@ class ObjectFactoryTest extends TestCase
     use ProphecyTrait;
     
     private ObjectFactory $objectFactory;
-    private ObjectProphecy|Configuration $configuration;
+    /** @var ObjectProphecy<Configuration>  */
+    private ObjectProphecy $configuration;
 
     protected function setUp(): void
     {

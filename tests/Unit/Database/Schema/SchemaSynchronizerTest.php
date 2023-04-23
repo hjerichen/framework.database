@@ -19,8 +19,10 @@ class SchemaSynchronizerTest extends TestCase
     use ProphecyTrait;
 
     private SchemaSynchronizer $schemaSynchronizer;
-    private ObjectProphecy|SchemaProvider $schemaProvider;
-    private ObjectProphecy|Connection $connection;
+    /** @var ObjectProphecy<SchemaProvider>  */
+    private ObjectProphecy $schemaProvider;
+    /** @var ObjectProphecy<Connection>  */
+    private ObjectProphecy $connection;
 
     protected function setUp(): void
     {
