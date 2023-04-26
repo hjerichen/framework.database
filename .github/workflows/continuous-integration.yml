@@ -20,13 +20,14 @@ jobs:
 
     name: PHP ${{ matrix.php }} Test ${{ matrix.dependencies }}
 
-    mysql:
-      image: mysql:5.7
-      env:
-        MYSQL_ROOT_PASSWORD: root
-      ports:
-        - 3306
-      options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=10
+    services:
+      mysql:
+        image: mysql:5.7
+        env:
+          MYSQL_ROOT_PASSWORD: root
+        ports:
+          - 3306
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=10
 
     steps:
       - name: Checkout
@@ -99,6 +100,15 @@ jobs:
   coverage:
     runs-on: ubuntu-22.04
     name: Code Coverage
+
+    services:
+      mysql:
+        image: mysql:5.7
+        env:
+          MYSQL_ROOT_PASSWORD: root
+        ports:
+          - 3306
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=10
 
     steps:
       - name: Checkout
