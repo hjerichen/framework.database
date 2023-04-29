@@ -138,9 +138,8 @@ jobs:
 
       - name: Setup MySQL
         run: |
-          sudo service mysql start
-          mysql -e "show variables like '%version%';" -uroot -proot
-          mysql -e "CREATE DATABASE dbunit;" -uroot -proot
+          mysql --host 127.0.0.1 --port ${{ job.services.mysql.ports['3306'] }} -uroot -proot -e "SELECT @@VERSION"
+          mysql --host 127.0.0.1 --port ${{ job.services.mysql.ports['3306'] }} -uroot -proot -e "CREATE DATABASE dbunit;"
 
       - name: Code coverage
         run: vendor/bin/phpunit --coverage-clover build/logs/clover.xml
@@ -166,7 +165,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           fetch-depth: 1
       - name: mysql version
