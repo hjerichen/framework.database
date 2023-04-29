@@ -139,6 +139,7 @@ jobs:
       - name: Setup MySQL
         run: |
           sudo service mysql start
+          mysql -e 'show variables like ‘%version%’;' -uroot -proot
           mysql -e 'CREATE DATABASE dbunit;' -uroot -proot
 
       - name: Code coverage
