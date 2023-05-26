@@ -12,9 +12,9 @@ use RuntimeException;
 /** @psalm-api */
 class ObjectFactory extends FrameworkObjectFactory
 {
+    /** @noinspection NullPointerExceptionInspection */
     public function getDatabase(): Connection
     {
-        /** @var ConnectionProvider $provider */
         $provider = $this->instantiateClass(ConnectionProvider::class);
         return $provider->getConnection();
     }
