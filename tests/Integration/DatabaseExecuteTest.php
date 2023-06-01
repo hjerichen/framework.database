@@ -4,8 +4,8 @@ namespace HJerichen\FrameworkDatabase\Test\Integration;
 
 use HJerichen\DBUnit\Dataset\DatasetArray;
 use HJerichen\FrameworkDatabase\Database\Schema\TablesProvider;
-use HJerichen\FrameworkDatabase\Test\DatabaseTestCase;
 use HJerichen\FrameworkDatabase\Test\Helpers\MyTablesProvider;
+use HJerichen\FrameworkDatabase\Testing\DatabaseTestCase;
 
 class DatabaseExecuteTest extends DatabaseTestCase
 {

@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace HJerichen\FrameworkDatabase\Test;
+namespace HJerichen\FrameworkDatabase\Testing;
 
 use Doctrine\DBAL\Connection;
 use HJerichen\DBUnit\Comparator\DatabaseDatasetComparator;

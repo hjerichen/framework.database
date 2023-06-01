@@ -7,11 +7,11 @@ use DateTimeImmutable;
 use HJerichen\DBUnit\Dataset\DatasetArray;
 use HJerichen\FrameworkDatabase\Database\Schema\TablesProvider;
 use HJerichen\FrameworkDatabase\DTO\Save\SaveCommand;
-use HJerichen\FrameworkDatabase\Test\DatabaseTestCase;
 use HJerichen\FrameworkDatabase\Test\Helpers\MyTablesProvider;
 use HJerichen\FrameworkDatabase\Test\Helpers\User1;
 use HJerichen\FrameworkDatabase\Test\Helpers\UserType;
 use HJerichen\FrameworkDatabase\Test\Helpers\UserTypeCollection;
+use HJerichen\FrameworkDatabase\Testing\DatabaseTestCase;
 
 class SaveCommandTest extends DatabaseTestCase
 {

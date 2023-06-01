@@ -8,9 +8,9 @@ use HJerichen\DBUnit\Dataset\Dataset;
 use HJerichen\DBUnit\Dataset\DatasetArray;
 use HJerichen\FrameworkDatabase\Database\Schema\TablesProvider;
 use HJerichen\FrameworkDatabase\DTO\Query\QueryWithSQLCommand;
-use HJerichen\FrameworkDatabase\Test\DatabaseTestCase;
 use HJerichen\FrameworkDatabase\Test\Helpers\MyTablesProvider;
 use HJerichen\FrameworkDatabase\Test\Helpers\User;
+use HJerichen\FrameworkDatabase\Testing\DatabaseTestCase;
 
 class QueryWithSQLCommandTest extends DatabaseTestCase
 {
