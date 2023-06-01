@@ -24,9 +24,7 @@ use SebastianBergmann\Comparator\ComparisonFailure;
 class DatabaseTestCase extends TestCase
 {
     use ProphecyTrait;
-    use MySQLTestCaseTrait {
-        MySQLTestCaseTrait::setUp as private setUpDatabase;
-    }
+    use MySQLTestCaseTrait;
 
     protected Connection $connection;
 
