@@ -56,11 +56,21 @@ class Utils
      */
     private static function convertToCorrectTypeWithName(string $typeName, mixed $value): mixed
     {
+        if (is_subclass_of($typeName, DTO::class)) {
+            $object = new $typeName;
+            $data = is_string($value)
+                ? json_decode($value, true, 512, JSON_THROW_ON_ERROR)
+                : $value;
+            self::populateObject($object, $data);
+            return $object;
+        }
         if (is_subclass_of($typeName, Enum::class)) {
             return call_user_func([$typeName, 'from'], $value);
         }
         if (is_subclass_of($typeName, Collection::class)) {
-            $items = json_decode($value, true, 512, JSON_THROW_ON_ERROR);
+            $items = is_string($value)
+                ? json_decode($value, true, 512, JSON_THROW_ON_ERROR)
+                : $value;
             $collection = new $typeName();
             foreach ($items as $item) {
                 $collection[] = self::convertToCorrectTypeWithName($collection->getType(), $item);

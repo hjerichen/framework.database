@@ -164,6 +164,7 @@ class SaveCommand
      * @param list<DTO> $objects
      * @return array<string,int|float|string|null>
      * @noinspection PhpDocMissingThrowsInspection
+     * @noinspection UnknownInspectionInspection
      */
     private function buildParameters(array $fields, array $objects): array
     {
@@ -186,6 +187,9 @@ class SaveCommand
             $values = $value->map($mapping);
             return json_encode($values, JSON_THROW_ON_ERROR);
         }
+        if ($value instanceof DTO) {
+            return json_encode($value, JSON_THROW_ON_ERROR);
+        }
         if ($value instanceof DateTimeInterface) {
             return $value->format('Y-m-d H:i:s');
         }
@@ -204,6 +208,7 @@ class SaveCommand
     /**
      * @param list<DTO> $objects
      * @noinspection PhpDocMissingThrowsInspection
+     * @noinspection UnknownInspectionInspection
      */
     private function assignIdsToObjects(array $objects): void
     {

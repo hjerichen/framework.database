@@ -81,6 +81,8 @@ class QueryWithIdsCommandTest extends DatabaseTestCase
         $user1->email = 'test1@test.de';
         $user1->categories = ['cat1', 'cat2'];
         $user1->dateImmutable = null;
+        $user1->product = null;
+        $user1->products = null;
 
         $expected = [$user1];
         $actual = $this->queryCommand->execute(User1::class, [1]);

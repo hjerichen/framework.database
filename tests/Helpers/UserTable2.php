@@ -32,6 +32,12 @@ class UserTable2 implements Table
         $table->addColumn('categories', Types::JSON, [
             'notnull' => false
         ]);
+        $table->addColumn('product', Types::JSON, [
+            'notnull' => false
+        ]);
+        $table->addColumn('products', Types::JSON, [
+            'notnull' => false
+        ]);
         $table->setPrimaryKey(['id']);
     }
 }

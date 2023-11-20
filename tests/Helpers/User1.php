@@ -21,4 +21,6 @@ class User1 implements DTO
     public ?DateTime $date;
     public ?DateTimeImmutable $dateImmutable;
     public ?UserTypeCollection $types;
+    public ?Product $product;
+    public ?ProductCollection $products;
 }

@@ -5,6 +5,8 @@ namespace HJerichen\FrameworkDatabase\Test\Unit\DTO;
 use DateTime;
 use DateTimeImmutable;
 use HJerichen\FrameworkDatabase\DTO\Utils;
+use HJerichen\FrameworkDatabase\Test\Helpers\Product;
+use HJerichen\FrameworkDatabase\Test\Helpers\ProductCollection;
 use HJerichen\FrameworkDatabase\Test\Helpers\User;
 use HJerichen\FrameworkDatabase\Test\Helpers\User1;
 use HJerichen\FrameworkDatabase\Test\Helpers\User2;
@@ -341,5 +343,93 @@ class UtilsTest extends TestCase
 
         $actual = $user->types;
         self::assertNull($actual);
+    }
+
+    public function testPopulateObjectForArrayToEnumCollection(): void
+    {
+        $data = ['types' => ["type1", "type2"]];
+        $user = new User1();
+
+        Utils::populateObject($user, $data);
+
+        $expected = new UserTypeCollection([
+            UserType::TYPE1(),
+            UserType::TYPE2(),
+        ]);
+        $actual = $user->types;
+        self::assertEquals($expected, $actual);
+    }
+
+    public function testPopulateObjectForJsonStringToDTO(): void
+    {
+        $data = ['product' => '{"id":10,"ean":"test"}'];
+        $user = new User1();
+
+        Utils::populateObject($user, $data);
+
+        $expected = new Product();
+        $expected->id = 10;
+        $expected->ean = 'test';
+        $actual = $user->product;
+        self::assertEquals($expected, $actual);
+    }
+
+    public function testPopulateObjectForArrayToDTO(): void
+    {
+        $data = ['product' => ['id' => 10, 'ean' => 'test']];
+        $user = new User1();
+
+        Utils::populateObject($user, $data);
+
+        $expected = new Product();
+        $expected->id = 10;
+        $expected->ean = 'test';
+        $actual = $user->product;
+        self::assertEquals($expected, $actual);
+    }
+
+    public function testPopulateObjectForJSONStringToDTOCollection(): void
+    {
+        $data = ['products' => '[{"id":10,"ean":"test1"},{"id":11,"ean":"test2"}]'];
+        $user = new User1();
+
+        Utils::populateObject($user, $data);
+
+        $expected1 = new Product();
+        $expected1->id = 10;
+        $expected1->ean = 'test1';
+
+        $expected2 = new Product();
+        $expected2->id = 11;
+        $expected2->ean = 'test2';
+
+        $expected = new ProductCollection([$expected1, $expected2]);
+        $actual = $user->products;
+        self::assertEquals($expected, $actual);
+    }
+
+    public function testPopulateObjectForArrayToDTOCollection(): void
+    {
+        $data = [
+            'products' => [
+                ['id' => 10, 'ean' => 'test1'],
+                ['id' => 11, 'ean' => 'test2'],
+            ]
+        ];
+        $user = new User1();
+
+        Utils::populateObject($user, $data);
+
+        $expected1 = new Product();
+        $expected1->id = 10;
+        $expected1->ean = 'test1';
+
+        $expected2 = new Product();
+        $expected2->id = 11;
+        $expected2->ean = 'test2';
+
+        $expected = new ProductCollection([$expected1, $expected2]);
+        $actual = $user->products;
+        self::assertEquals($expected, $actual);
     }
 }
