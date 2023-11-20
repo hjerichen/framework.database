@@ -308,6 +308,18 @@ class UtilsTest extends TestCase
         self::assertEquals($expected, $actual);
     }
 
+    public function testPopulateObjectForArrayToArray(): void
+    {
+        $data = ['categories' => ['cat1', 'cat2']];
+        $user = new User1();
+
+        Utils::populateObject($user, $data);
+
+        $expected = ['cat1', 'cat2'];
+        $actual = $user->categories;
+        self::assertEquals($expected, $actual);
+    }
+
     public function testPopulateObjectForJsonStringToArrayNull(): void
     {
         $data = ['categories' => null];

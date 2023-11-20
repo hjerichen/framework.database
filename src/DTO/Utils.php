@@ -83,12 +83,16 @@ class Utils
         if ($typeName === DateTimeImmutable::class || is_subclass_of($typeName, DateTimeImmutable::class)) {
             return new DateTimeImmutable($value);
         }
+        if ($typeName === 'array') {
+            return is_string($value)
+                ? json_decode($value, true, 512, JSON_THROW_ON_ERROR)
+                : $value;
+        }
         return match ($typeName) {
             'int' => (int)$value,
             'bool' => (bool)$value,
             'float' => (float)$value,
             'string' => (string)$value,
-            'array' => json_decode($value, true, 512, JSON_THROW_ON_ERROR),
             default => $value,
         };
     }
