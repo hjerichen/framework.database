@@ -42,6 +42,7 @@ class SaveCommandTest extends DatabaseTestCase
         $product2 = new Product();
         $product2->id = 11;
         $product2->ean = 'test2';
+        $product2->children = new ProductCollection([$product1]);
 
         $user1 = new User1();
         $user1->name = 'jon';
@@ -76,7 +77,7 @@ class SaveCommandTest extends DatabaseTestCase
                     'types' => '["type1","type2"]',
                     'categories' => '["cat1","cat2"]',
                     'product' => '{"id":10,"ean":"test1"}',
-                    'products' => '["{\"id\":10,\"ean\":\"test1\"}","{\"id\":11,\"ean\":\"test2\"}"]',
+                    'products' => '["{\"id\":10,\"ean\":\"test1\"}","{\"id\":11,\"ean\":\"test2\",\"children\":[{\"id\":10,\"ean\":\"test1\"}]}"]',
                 ],
                 [
                     'id' => 2,

@@ -5,10 +5,12 @@ namespace HJerichen\FrameworkDatabase\DTO;
 use DateTime;
 use DateTimeImmutable;
 use HJerichen\Collections\Collection;
+use HJerichen\Collections\ObjectCollection;
 use HJerichen\Framework\Types\Enum;
 use ReflectionClass;
 use ReflectionNamedType;
 use ReflectionType;
+use RuntimeException;
 
 class Utils
 {
@@ -40,6 +42,73 @@ class Utils
             }
         }
     }
+
+    /**
+     * @template T extends ObjectCollection
+     * @param class-string<T> $collectionClass
+     * @param array[] $hashes
+     * @return T
+     * @psalm-suppress MismatchingDocblockReturnType, MixedMethodCall
+     */
+    public static function buildDTOCollection(string $collectionClass, array $hashes): ObjectCollection
+    {
+        $collection = new $collectionClass;
+        if (!($collection instanceof ObjectCollection)) {
+            throw new RuntimeException('No collection provided.');
+        }
+
+        $objects = self::buildDTOs($collection->getType(), $hashes);
+        $collection->pushMultiple($objects);
+        return $collection;
+    }
+
+    /**
+     * @template T extends DTO
+     * @param class-string<T> $class
+     * @param array[] $hashes
+     * @return T[]
+     */
+    public static function buildDTOs(string $class, array $hashes): array
+    {
+        return array_map(static fn(array $hash) => self::buildDTO($class, $hash), $hashes);
+    }
+
+    /**
+     * @template T extends DTO
+     * @param class-string<T> $class
+     * @param array $hash
+     * @return T
+     * @psalm-suppress MismatchingDocblockReturnType, MixedMethodCall
+     */
+    public static function buildDTO(string $class, array $hash): DTO
+    {
+        $dto = new $class;
+        if (!($dto instanceof DTO)) {
+            throw new RuntimeException("Class $class does not implement DTO.");
+        }
+        self::populateObject($dto, $hash);
+        return $dto;
+    }
+
+    /** @psalm-suppress MixedAssignment, ArgumentTypeCoercion */
+    public static function convertToHash(DTO $object): array
+    {
+        $hash = self::convertObjectToArray($object);
+        foreach ($hash as $key => $value) {
+            if ($value instanceof DTO) {
+                $hash[$key] = self::convertToHash($value);
+            } elseif ($value instanceof ObjectCollection) {
+                $hash[$key] = self::convertToHashes($value);
+            }
+        }
+        return $hash;
+    }
+
+    /** @param ObjectCollection<DTO> $objects */
+    public static function convertToHashes(ObjectCollection $objects): array {
+        return $objects->map(self::convertToHash(...));
+    }
+
 
     private static function convertToCorrectType(ReflectionType|null $type, mixed $value): mixed
     {

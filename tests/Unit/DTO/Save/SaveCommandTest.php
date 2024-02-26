@@ -182,7 +182,7 @@ class SaveCommandTest extends TestCase
             VALUES
                 (:id_1, :ean_1)
             ON DUPLICATE KEY UPDATE
-                `ean` = VALUES(`ean`)
+                `ean` = VALUES(`ean`), `alternative` = `alternative`, `children` = `children`
             SQL;
         $expectedParameters1 = [
             'id_1' => 33,

@@ -10,6 +10,7 @@ use HJerichen\FrameworkDatabase\DTO\QuoteTableColumnTrait;
 use HJerichen\FrameworkDatabase\DTO\TableNameResolver\TableNameResolver;
 use HJerichen\FrameworkDatabase\DTO\TableNameResolver\TableNameResolverAttribute;
 use HJerichen\FrameworkDatabase\DTO\TableNameResolver\TableNameResolverBase;
+use HJerichen\FrameworkDatabase\DTO\Utils;
 use ReflectionClass;
 
 class SaveCommand
@@ -188,7 +189,7 @@ class SaveCommand
             return json_encode($values, JSON_THROW_ON_ERROR);
         }
         if ($value instanceof DTO) {
-            return json_encode($value, JSON_THROW_ON_ERROR);
+            return json_encode(Utils::convertToHash($value), JSON_THROW_ON_ERROR);
         }
         if ($value instanceof DateTimeInterface) {
             return $value->format('Y-m-d H:i:s');

@@ -4,6 +4,8 @@ namespace HJerichen\FrameworkDatabase\Test\Unit\DTO;
 
 use DateTime;
 use DateTimeImmutable;
+use HJerichen\Collections\ObjectCollection;
+use HJerichen\FrameworkDatabase\DTO\DTO;
 use HJerichen\FrameworkDatabase\DTO\Utils;
 use HJerichen\FrameworkDatabase\Test\Helpers\Product;
 use HJerichen\FrameworkDatabase\Test\Helpers\ProductCollection;
@@ -13,6 +15,7 @@ use HJerichen\FrameworkDatabase\Test\Helpers\User2;
 use HJerichen\FrameworkDatabase\Test\Helpers\UserType;
 use HJerichen\FrameworkDatabase\Test\Helpers\UserTypeCollection;
 use PHPUnit\Framework\TestCase;
+use RuntimeException;
 
 class UtilsTest extends TestCase
 {
@@ -443,5 +446,62 @@ class UtilsTest extends TestCase
         $expected = new ProductCollection([$expected1, $expected2]);
         $actual = $user->products;
         self::assertEquals($expected, $actual);
+    }
+
+    public function test_buildDTOCollection(): void
+    {
+        $actual = Utils::buildDTOCollection(ProductCollection::class, [
+            ['id' => 10, 'ean' => '123'],
+            ['id' => 11, 'ean' => '1234', 'alternative' => ['id' => 444]],
+        ]);
+
+        $product1 = new Product();
+        $product1->id = 10;
+        $product1->ean = '123';
+        $product2 = new Product();
+        $product2->id = 11;
+        $product2->ean = '1234';
+        $product2->alternative = new Product();
+        $product2->alternative->id = 444;
+        $expected = new ProductCollection([$product1, $product2]);
+
+        $this->assertEquals($expected, $actual);
+    }
+
+    public function test_buildDTOCollection_withNoClassStringOfCollection(): void
+    {
+        $expected = new RuntimeException('No collection provided.');
+        $this->expectExceptionObject($expected);
+
+        Utils::buildDTOCollection(Product::class, []);
+    }
+
+    public function test_buildDTO_withNoDTO(): void
+    {
+        $expected = new RuntimeException('Class HJerichen\FrameworkDatabase\Test\Unit\DTO\UtilsTest does not implement DTO.');
+        $this->expectExceptionObject($expected);
+
+        Utils::buildDTO(self::class, []);
+    }
+
+    public function test_convertToHashes(): void
+    {
+        $product1 = new Product();
+        $product1->id = 10;
+        $product1->ean = '123';
+        $product2 = new Product();
+        $product2->id = 11;
+        $product2->ean = '1234';
+        $product2->alternative = new Product();
+        $product2->alternative->id = 444;
+        $products = new ProductCollection([$product1, $product2]);
+
+        $expected = [
+            ['id' => 10, 'ean' => '123'],
+            ['id' => 11, 'ean' => '1234', 'alternative' => ['id' => 444]],
+        ];
+        /** @var ObjectCollection<DTO> $products */
+        $actual = Utils::convertToHashes($products);
+        $this->assertEquals($expected, $actual);
     }
 }

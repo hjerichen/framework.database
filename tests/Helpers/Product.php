@@ -11,4 +11,6 @@ class Product implements DTO
 {
     public int $id;
     public string $ean;
+    public Product|null $alternative;
+    public ProductCollection|null $children;
 }
