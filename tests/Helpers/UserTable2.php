@@ -2,42 +2,74 @@
 
 namespace HJerichen\FrameworkDatabase\Test\Helpers;
 
-use Doctrine\DBAL\Schema\Schema;
-use Doctrine\DBAL\Schema\SchemaException;
+use Doctrine\DBAL\Schema\Column;
+use Doctrine\DBAL\Schema\PrimaryKeyConstraint;
+use Doctrine\DBAL\Schema\Table as TableSchema;
 use Doctrine\DBAL\Types\Types;
 use HJerichen\FrameworkDatabase\Database\Schema\Table;
+use Override;
 
 class UserTable2 implements Table
 {
-    /** @throws SchemaException */
-    public function addToSchema(Schema $schema): void
+    #[Override]
+    public function getSchema(): TableSchema
     {
-        $table = $schema->createTable('user');
-        $table->addColumn('id', Types::INTEGER,[
-            'unsigned' => true,
-            'autoincrement' => true
-        ]);
-        $table->addColumn('email', Types::STRING, [
-            'notnull' => true
-        ]);
-        $table->addColumn('date', Types::DATETIME_MUTABLE, [
-            'notnull' => false
-        ]);
-        $table->addColumn('dateImmutable', Types::DATETIME_IMMUTABLE, [
-            'notnull' => false
-        ]);
-        $table->addColumn('types', Types::JSON, [
-            'notnull' => false
-        ]);
-        $table->addColumn('categories', Types::JSON, [
-            'notnull' => false
-        ]);
-        $table->addColumn('product', Types::JSON, [
-            'notnull' => false
-        ]);
-        $table->addColumn('products', Types::JSON, [
-            'notnull' => false
-        ]);
-        $table->setPrimaryKey(['id']);
+        return TableSchema::editor()
+            ->setUnquotedName('user')
+            ->addColumn(
+                Column::editor()
+                    ->setUnquotedName('id')
+                    ->setTypeName(Types::INTEGER)
+                    ->setUnsigned(true)
+                    ->setAutoincrement(true)
+                    ->create()
+            )->addColumn(
+                Column::editor()
+                    ->setUnquotedName('email')
+                    ->setTypeName(Types::STRING)
+                    ->setLength(255)
+                    ->setNotNull(true)
+                    ->create()
+            )->addColumn(
+                Column::editor()
+                    ->setUnquotedName('date')
+                    ->setTypeName(Types::DATETIME_MUTABLE)
+                    ->setNotNull(false)
+                    ->create()
+            )->addColumn(
+                Column::editor()
+                    ->setUnquotedName('dateImmutable')
+                    ->setTypeName(Types::DATETIME_IMMUTABLE)
+                    ->setNotNull(false)
+                    ->create()
+            )->addColumn(
+                Column::editor()
+                    ->setUnquotedName('types')
+                    ->setTypeName(Types::JSON)
+                    ->setNotNull(false)
+                    ->create()
+            )->addColumn(
+                Column::editor()
+                    ->setUnquotedName('categories')
+                    ->setTypeName(Types::JSON)
+                    ->setNotNull(false)
+                    ->create()
+            )->addColumn(
+                Column::editor()
+                    ->setUnquotedName('product')
+                    ->setTypeName(Types::JSON)
+                    ->setNotNull(false)
+                    ->create()
+            )->addColumn(
+                Column::editor()
+                    ->setUnquotedName('products')
+                    ->setTypeName(Types::JSON)
+                    ->setNotNull(false)
+                    ->create()
+            )->addPrimaryKeyConstraint(
+                PrimaryKeyConstraint::editor()
+                    ->setUnquotedColumnNames(firstColumnName: 'id')
+                    ->create()
+            )->create();
     }
 }

@@ -9,6 +9,7 @@ use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Result;
 use HJerichen\FrameworkDatabase\DTO\Query\QueryWithFieldFilterCommand;
 use HJerichen\FrameworkDatabase\Test\Helpers\User;
+use Override;
 use PHPUnit\Framework\TestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
@@ -21,6 +22,7 @@ class QueryWithFieldFilterCommandTest extends TestCase
     /** @var ObjectProphecy<Connection> */
     private ObjectProphecy $connection;
 
+    #[Override]
     protected function setUp(): void
     {
         parent::setUp();

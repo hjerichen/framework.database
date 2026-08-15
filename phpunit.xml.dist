@@ -1,6 +1,6 @@
 <phpunit
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.5/phpunit.xsd"
+        xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/12.5/phpunit.xsd"
         cacheResult="false"
         bootstrap="./vendor/autoload.php">
     <testsuites>
@@ -8,12 +8,12 @@
             <directory>./tests</directory>
         </testsuite>
     </testsuites>
-    <coverage>
+    <source>
         <include>
-            <directory suffix=".php">./src</directory>
+            <directory>./src</directory>
         </include>
-    </coverage>
+    </source>
     <php>
-        <const name="MYSQL_URL" value="mysql://root:root@127.0.0.1:3306/dbunit"/>
+        <const name="MYSQL_URL" value="pdo-mysql://root:root@127.0.0.1:3306/dbunit"/>
     </php>
 </phpunit>

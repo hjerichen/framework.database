@@ -5,6 +5,7 @@ namespace HJerichen\FrameworkDatabase\Test\Unit\DTO\Delete;
 use Doctrine\DBAL\Connection;
 use HJerichen\FrameworkDatabase\DTO\Delete\DeleteByIdsCommand;
 use HJerichen\FrameworkDatabase\Test\Helpers\User;
+use Override;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
@@ -18,6 +19,7 @@ class DeleteByIdsCommandTest extends TestCase
     /** @var ObjectProphecy<Connection> */
     private ObjectProphecy $connection;
 
+    #[Override]
     protected function setUp(): void
     {
         parent::setUp();

@@ -9,22 +9,26 @@ use HJerichen\FrameworkDatabase\DTO\Query\QueryWithFieldFilterCommand;
 use HJerichen\FrameworkDatabase\Test\Helpers\MyTablesProvider;
 use HJerichen\FrameworkDatabase\Test\Helpers\User;
 use HJerichen\FrameworkDatabase\Testing\DatabaseTestCase;
+use Override;
 
 class QueryWithFieldFilterCommandTest extends DatabaseTestCase
 {
     private QueryWithFieldFilterCommand $queryCommand;
 
+    #[Override]
     protected function setUp(): void
     {
         parent::setUp();
         $this->queryCommand = new QueryWithFieldFilterCommand($this->connection);
     }
 
+    #[Override]
     protected function getSchemaTablesProvider(): TablesProvider
     {
         return new MyTablesProvider();
     }
 
+    #[Override]
     protected function getDatasetForSetup(): Dataset
     {
         return new DatasetArray([

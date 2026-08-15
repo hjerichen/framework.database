@@ -6,6 +6,7 @@ namespace HJerichen\FrameworkDatabase\Tests\Integration;
 use Doctrine\DBAL\Connection;
 use HJerichen\FrameworkDatabase\Configuration;
 use HJerichen\FrameworkDatabase\Database\ConnectionProvider;
+use Override;
 use PDO;
 use PHPUnit\Framework\TestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
@@ -21,6 +22,7 @@ class DatabaseConnectionTest extends TestCase
      * @noinspection PhpUndefinedConstantInspection
      * @psalm-suppress UndefinedConstant
      */
+    #[Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -31,6 +33,7 @@ class DatabaseConnectionTest extends TestCase
         $this->connection = $this->connectionProvider->getConnection();
     }
 
+    #[Override]
     protected function tearDown(): void
     {
         $this->connectionProvider->setConnection(null);

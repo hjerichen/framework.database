@@ -5,6 +5,7 @@ namespace HJerichen\FrameworkDatabase\Test\Unit\DTO;
 use DateTime;
 use DateTimeImmutable;
 use HJerichen\Collections\ObjectCollection;
+use HJerichen\FrameworkDatabase\Database\Schema\TablesProviderEmpty;
 use HJerichen\FrameworkDatabase\DTO\DTO;
 use HJerichen\FrameworkDatabase\DTO\Utils;
 use HJerichen\FrameworkDatabase\Test\Helpers\Product;
@@ -237,7 +238,7 @@ class UtilsTest extends TestCase
 
         Utils::populateObject($user, $data);
 
-        $expected = UserType::TYPE1();
+        $expected = UserType::TYPE1;
         $actual = $user->type;
         self::assertEquals($expected, $actual);
     }
@@ -342,8 +343,8 @@ class UtilsTest extends TestCase
         Utils::populateObject($user, $data);
 
         $expected = new UserTypeCollection([
-            UserType::TYPE1(),
-            UserType::TYPE2(),
+            UserType::TYPE1,
+            UserType::TYPE2,
         ]);
         $actual = $user->types;
         self::assertEquals($expected, $actual);
@@ -368,8 +369,8 @@ class UtilsTest extends TestCase
         Utils::populateObject($user, $data);
 
         $expected = new UserTypeCollection([
-            UserType::TYPE1(),
-            UserType::TYPE2(),
+            UserType::TYPE1,
+            UserType::TYPE2,
         ]);
         $actual = $user->types;
         self::assertEquals($expected, $actual);
@@ -478,10 +479,12 @@ class UtilsTest extends TestCase
 
     public function test_buildDTO_withNoDTO(): void
     {
-        $expected = new RuntimeException('Class HJerichen\FrameworkDatabase\Test\Unit\DTO\UtilsTest does not implement DTO.');
+        $class = TablesProviderEmpty::class;
+
+        $expected = new RuntimeException("Class {$class} does not implement DTO.");
         $this->expectExceptionObject($expected);
 
-        Utils::buildDTO(self::class, []);
+        Utils::buildDTO($class, []);
     }
 
     public function test_convertToHashes(): void

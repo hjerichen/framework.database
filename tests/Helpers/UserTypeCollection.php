@@ -2,12 +2,10 @@
 
 namespace HJerichen\FrameworkDatabase\Test\Helpers;
 
-use HJerichen\Collections\Collection;
 use HJerichen\Collections\ObjectCollection;
 
 /**
  * @extends ObjectCollection<UserType>
- * @extends Collection<UserType>
  */
 class UserTypeCollection extends ObjectCollection
 {

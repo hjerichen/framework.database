@@ -8,6 +8,7 @@ use HJerichen\Framework\Response\TextResponse;
 use HJerichen\FrameworkDatabase\CLIController;
 use HJerichen\FrameworkDatabase\Database\Schema\SchemaProvider;
 use HJerichen\FrameworkDatabase\Database\Schema\SchemaSynchronizer;
+use Override;
 use PHPUnit\Framework\TestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
@@ -24,6 +25,7 @@ class CLIControllerTest extends TestCase
     /** @var ObjectProphecy<Schema> */
     private ObjectProphecy $schema;
 
+    #[Override]
     protected function setUp(): void
     {
         parent::setUp();

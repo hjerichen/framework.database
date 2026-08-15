@@ -1,5 +1,4 @@
 <?php
-/** @noinspection DuplicatedCode */
 declare(strict_types=1);
 
 namespace HJerichen\FrameworkDatabase\Test\Integration\DTO;
@@ -11,22 +10,26 @@ use HJerichen\FrameworkDatabase\DTO\Query\QueryWithSQLCommand;
 use HJerichen\FrameworkDatabase\Test\Helpers\MyTablesProvider;
 use HJerichen\FrameworkDatabase\Test\Helpers\User;
 use HJerichen\FrameworkDatabase\Testing\DatabaseTestCase;
+use Override;
 
 class QueryWithSQLCommandTest extends DatabaseTestCase
 {
     private QueryWithSQLCommand $queryCommand;
 
+    #[Override]
     protected function setUp(): void
     {
         parent::setUp();
         $this->queryCommand = new QueryWithSQLCommand($this->connection);
     }
 
+    #[Override]
     protected function getSchemaTablesProvider(): TablesProvider
     {
         return new MyTablesProvider();
     }
 
+    #[Override]
     protected function getDatasetForSetup(): Dataset
     {
         return new DatasetArray([

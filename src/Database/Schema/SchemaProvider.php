@@ -19,11 +19,11 @@ class SchemaProvider
 
     public function getWantedSchema(): Schema
     {
-        $schema = new Schema();
-        foreach ($this->tablesProvider->getSchemaTables() as $table) {
-            $table->addToSchema($schema);
-        }
-        return $schema;
+        $tables = array_map(
+            callback: static fn(Table $table) => $table->getSchema(),
+            array: $this->tablesProvider->getSchemaTables()
+        );
+        return new Schema($tables);
     }
 
     /** @throws Exception */

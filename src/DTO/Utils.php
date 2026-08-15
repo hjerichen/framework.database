@@ -6,7 +6,6 @@ use DateTime;
 use DateTimeImmutable;
 use HJerichen\Collections\Collection;
 use HJerichen\Collections\ObjectCollection;
-use HJerichen\Framework\Types\Enum;
 use ReflectionClass;
 use ReflectionNamedType;
 use ReflectionType;
@@ -133,7 +132,7 @@ class Utils
             self::populateObject($object, $data);
             return $object;
         }
-        if (is_subclass_of($typeName, Enum::class)) {
+        if (enum_exists($typeName)) {
             return call_user_func([$typeName, 'from'], $value);
         }
         if (is_subclass_of($typeName, Collection::class)) {

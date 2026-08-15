@@ -6,6 +6,7 @@ use HJerichen\Framework\Configuration\Configuration as FrameworkConfiguration;
 use HJerichen\FrameworkDatabase\Configuration;
 use HJerichen\FrameworkDatabase\Database\Schema\TablesProvider;
 use HJerichen\FrameworkDatabase\Test\Helpers\MyTablesProvider;
+use Override;
 use PHPUnit\Framework\TestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
@@ -18,6 +19,7 @@ class ConfigurationTest extends TestCase
     /** @var ObjectProphecy<FrameworkConfiguration> */
     private ObjectProphecy $frameworkConfiguration;
 
+    #[Override]
     protected function setUp(): void
     {
         parent::setUp();

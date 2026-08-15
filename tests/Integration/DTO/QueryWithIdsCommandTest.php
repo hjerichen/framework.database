@@ -12,22 +12,26 @@ use HJerichen\FrameworkDatabase\Test\Helpers\User1;
 use HJerichen\FrameworkDatabase\Test\Helpers\UserType;
 use HJerichen\FrameworkDatabase\Test\Helpers\UserTypeCollection;
 use HJerichen\FrameworkDatabase\Testing\DatabaseTestCase;
+use Override;
 
 class QueryWithIdsCommandTest extends DatabaseTestCase
 {
     private QueryWithIdsCommand $queryCommand;
 
+    #[Override]
     protected function setUp(): void
     {
         parent::setUp();
         $this->queryCommand = new QueryWithIdsCommand($this->connection);
     }
 
+    #[Override]
     protected function getSchemaTablesProvider(): TablesProvider
     {
         return new MyTablesProvider();
     }
 
+    #[Override]
     protected function getDatasetForSetup(): Dataset
     {
         return new DatasetArray([
@@ -76,8 +80,8 @@ class QueryWithIdsCommandTest extends DatabaseTestCase
         $user1->id = 1;
         $user1->date = null;
         $user1->name = 'jon';
-        $user1->type = UserType::TYPE1();
-        $user1->types = new UserTypeCollection([UserType::TYPE1()]);
+        $user1->type = UserType::TYPE1;
+        $user1->types = new UserTypeCollection([UserType::TYPE1]);
         $user1->email = 'test1@test.de';
         $user1->categories = ['cat1', 'cat2'];
         $user1->dateImmutable = null;

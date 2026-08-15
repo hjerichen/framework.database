@@ -10,6 +10,7 @@ use HJerichen\FrameworkDatabase\Database\ConnectionProvider;
 use HJerichen\FrameworkDatabase\Database\Schema\TablesProviderEmpty;
 use HJerichen\FrameworkDatabase\ObjectFactory;
 use HJerichen\FrameworkDatabase\Test\Helpers\MyTablesProvider;
+use Override;
 use PHPUnit\Framework\TestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
@@ -22,6 +23,7 @@ class ObjectFactoryTest extends TestCase
     /** @var ObjectProphecy<Configuration>  */
     private ObjectProphecy $configuration;
 
+    #[Override]
     protected function setUp(): void
     {
         parent::setUp();

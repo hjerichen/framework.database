@@ -9,22 +9,26 @@ use HJerichen\FrameworkDatabase\DTO\Query\QueryGroupedWithSQLCommand;
 use HJerichen\FrameworkDatabase\Test\Helpers\MyTablesProvider;
 use HJerichen\FrameworkDatabase\Test\Helpers\User;
 use HJerichen\FrameworkDatabase\Testing\DatabaseTestCase;
+use Override;
 
 class QueryGroupedWithSQLCommandTest extends DatabaseTestCase
 {
     private QueryGroupedWithSQLCommand $queryCommand;
 
+    #[Override]
     protected function setUp(): void
     {
         parent::setUp();
         $this->queryCommand = new QueryGroupedWithSQLCommand($this->connection);
     }
 
+    #[Override]
     protected function getSchemaTablesProvider(): TablesProvider
     {
         return new MyTablesProvider();
     }
 
+    #[Override]
     protected function getDatasetForSetup(): Dataset
     {
         return new DatasetArray([

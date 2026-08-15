@@ -7,13 +7,14 @@ use HJerichen\DBUnit\Comparator\DatabaseDatasetComparator;
 use HJerichen\DBUnit\Dataset\Database\DatabaseDatasetPDO;
 use HJerichen\DBUnit\Dataset\Dataset;
 use HJerichen\DBUnit\Dataset\DatasetArray;
-use HJerichen\DBUnit\MySQLTestCaseTrait;
+use HJerichen\DBUnit\MySQL8TestCaseTrait;
 use HJerichen\FrameworkDatabase\Configuration;
 use HJerichen\FrameworkDatabase\Database\ConnectionProvider;
 use HJerichen\FrameworkDatabase\Database\Schema\SchemaProvider;
 use HJerichen\FrameworkDatabase\Database\Schema\SchemaSynchronizer;
 use HJerichen\FrameworkDatabase\Database\Schema\TablesProvider;
 use HJerichen\FrameworkDatabase\Database\Schema\TablesProviderEmpty;
+use Override;
 use PDO;
 use PHPUnit\Framework\ExpectationFailedException;
 use PHPUnit\Framework\TestCase;
@@ -24,10 +25,11 @@ use SebastianBergmann\Comparator\ComparisonFailure;
 class DatabaseTestCase extends TestCase
 {
     use ProphecyTrait;
-    use MySQLTestCaseTrait;
+    use MySQL8TestCaseTrait;
 
     protected Connection $connection;
 
+    #[Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -40,7 +42,7 @@ class DatabaseTestCase extends TestCase
 
     /**
      * @noinspection PhpUndefinedConstantInspection
-     * @psalm-suppress UndefinedConstant
+     * @psalm-suppress UndefinedConstant,UndefinedMagicMethod,MixedMethodCall
      */
     protected function getConfiguration(): Configuration
     {
@@ -49,6 +51,7 @@ class DatabaseTestCase extends TestCase
         return $configuration->reveal();
     }
 
+    #[Override]
     protected function getDatabase(): PDO
     {
         $database = $this->connection->getNativeConnection();
@@ -57,6 +60,7 @@ class DatabaseTestCase extends TestCase
         throw new RuntimeException('Only PDO as connection supported');
     }
 
+    #[Override]
     protected function getDatasetForSetup(): Dataset
     {
         return new DatasetArray([]);

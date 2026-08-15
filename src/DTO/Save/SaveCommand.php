@@ -2,6 +2,7 @@
 
 namespace HJerichen\FrameworkDatabase\DTO\Save;
 
+use BackedEnum;
 use DateTimeInterface;
 use Doctrine\DBAL\Connection;
 use HJerichen\Collections\Collection;
@@ -12,6 +13,7 @@ use HJerichen\FrameworkDatabase\DTO\TableNameResolver\TableNameResolverAttribute
 use HJerichen\FrameworkDatabase\DTO\TableNameResolver\TableNameResolverBase;
 use HJerichen\FrameworkDatabase\DTO\Utils;
 use ReflectionClass;
+use UnitEnum;
 
 class SaveCommand
 {
@@ -165,7 +167,6 @@ class SaveCommand
      * @param list<DTO> $objects
      * @return array<string,int|float|string|null>
      * @noinspection PhpDocMissingThrowsInspection
-     * @noinspection UnknownInspectionInspection
      */
     private function buildParameters(array $fields, array $objects): array
     {
@@ -203,13 +204,18 @@ class SaveCommand
         if (is_numeric($value) || is_null($value)) {
             return $value;
         }
+        if ($value instanceof BackedEnum) {
+            return $value->value;
+        }
+        if ($value instanceof UnitEnum) {
+            return $value->name;
+        }
         return (string)$value;
     }
 
     /**
      * @param list<DTO> $objects
      * @noinspection PhpDocMissingThrowsInspection
-     * @noinspection UnknownInspectionInspection
      */
     private function assignIdsToObjects(array $objects): void
     {

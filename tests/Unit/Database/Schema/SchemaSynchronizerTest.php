@@ -4,11 +4,13 @@ namespace HJerichen\FrameworkDatabase\Test\Unit\Database\Schema;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Platforms\PostgreSQLPlatform;
+use Doctrine\DBAL\Result;
 use Doctrine\DBAL\Schema\Schema;
 use HJerichen\FrameworkDatabase\Database\Schema\SchemaProvider;
 use HJerichen\FrameworkDatabase\Database\Schema\SchemaSynchronizer;
 use HJerichen\FrameworkDatabase\Test\Helpers\UserTable1;
 use HJerichen\FrameworkDatabase\Test\Helpers\UserTable2;
+use Override;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
@@ -24,6 +26,7 @@ class SchemaSynchronizerTest extends TestCase
     /** @var ObjectProphecy<Connection>  */
     private ObjectProphecy $connection;
 
+    #[Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -40,10 +43,8 @@ class SchemaSynchronizerTest extends TestCase
 
     public function testForNoChanges(): void
     {
-        $schemaWanted = new Schema();
-        $schemaCurrent = new Schema();
-        (new UserTable1())->addToSchema($schemaWanted);
-        (new UserTable1())->addToSchema($schemaCurrent);
+        $schemaWanted = new Schema([(new UserTable1())->getSchema()]);
+        $schemaCurrent = new Schema([(new UserTable1())->getSchema()]);
 
         $this->schemaProvider->getWantedSchema()->willReturn($schemaWanted);
         $this->schemaProvider->getCurrentSchema()->willReturn($schemaCurrent);
@@ -55,35 +56,35 @@ class SchemaSynchronizerTest extends TestCase
 
     public function testForChanges(): void
     {
-        $schemaWanted = new Schema();
-        $schemaCurrent = new Schema();
-        (new UserTable1())->addToSchema($schemaWanted);
-        (new UserTable2())->addToSchema($schemaCurrent);
+        $result = $this->prophesize(Result::class);
+
+        $schemaWanted = new Schema([(new UserTable1())->getSchema()]);
+        $schemaCurrent = new Schema([(new UserTable2())->getSchema()]);
 
         $this->schemaProvider->getWantedSchema()->willReturn($schemaWanted);
         $this->schemaProvider->getCurrentSchema()->willReturn($schemaCurrent);
 
-        $expected = "ALTER TABLE user ADD name VARCHAR(255) NOT NULL, ADD type VARCHAR(255) DEFAULT 'type1' NOT NULL";
-        $this->connection->executeQuery($expected)->shouldBeCalledOnce();
+        $expected = "ALTER TABLE user ADD name VARCHAR(255) NOT NULL, ADD type VARCHAR(10) DEFAULT 'type1' NOT NULL";
+        $this->connection->executeQuery($expected)->shouldBeCalledOnce()->willReturn($result->reveal());
 
         $this->schemaSynchronizer->execute();
     }
 
     public function testForChanges_withOtherPlatform(): void
     {
-        $schemaWanted = new Schema();
-        $schemaCurrent = new Schema();
-        (new UserTable1())->addToSchema($schemaWanted);
-        (new UserTable2())->addToSchema($schemaCurrent);
+        $result = $this->prophesize(Result::class);
+
+        $schemaWanted = new Schema([(new UserTable1())->getSchema()]);
+        $schemaCurrent = new Schema([(new UserTable2())->getSchema()]);
 
         $this->schemaProvider->getWantedSchema()->willReturn($schemaWanted);
         $this->schemaProvider->getCurrentSchema()->willReturn($schemaCurrent);
 
         $expected = "ALTER TABLE \"user\" ADD name VARCHAR(255) NOT NULL";
-        $this->connection->executeQuery($expected)->shouldBeCalledOnce();
+        $this->connection->executeQuery($expected)->shouldBeCalledOnce()->willReturn($result);
 
-        $expected = "ALTER TABLE \"user\" ADD type VARCHAR(255) DEFAULT 'type1' NOT NULL";
-        $this->connection->executeQuery($expected)->shouldBeCalledOnce();
+        $expected = "ALTER TABLE \"user\" ADD type VARCHAR(10) DEFAULT 'type1' NOT NULL";
+        $this->connection->executeQuery($expected)->shouldBeCalledOnce()->willReturn($result);
 
         $this->schemaSynchronizer->setPlatform(new PostgreSQLPlatform());
         $this->schemaSynchronizer->execute();

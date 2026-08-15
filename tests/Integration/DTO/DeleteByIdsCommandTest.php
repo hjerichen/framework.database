@@ -9,22 +9,26 @@ use HJerichen\FrameworkDatabase\DTO\Delete\DeleteByIdsCommand;
 use HJerichen\FrameworkDatabase\Test\Helpers\MyTablesProvider;
 use HJerichen\FrameworkDatabase\Test\Helpers\User;
 use HJerichen\FrameworkDatabase\Testing\DatabaseTestCase;
+use Override;
 
 class DeleteByIdsCommandTest extends DatabaseTestCase
 {
     private DeleteByIdsCommand $command;
 
+    #[Override]
     protected function setUp(): void
     {
         parent::setUp();
         $this->command = new DeleteByIdsCommand($this->connection);
     }
 
+    #[Override]
     protected function getSchemaTablesProvider(): TablesProvider
     {
         return new MyTablesProvider();
     }
 
+    #[Override]
     protected function getDatasetForSetup(): Dataset
     {
         return new DatasetArray([

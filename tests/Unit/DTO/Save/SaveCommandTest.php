@@ -11,6 +11,7 @@ use HJerichen\FrameworkDatabase\Test\Helpers\User;
 use HJerichen\FrameworkDatabase\Test\Helpers\User1;
 use HJerichen\FrameworkDatabase\Test\Helpers\User2;
 use HJerichen\FrameworkDatabase\Test\Helpers\UserType;
+use Override;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
@@ -24,6 +25,7 @@ class SaveCommandTest extends TestCase
     /** @var ObjectProphecy<Connection> */
     private ObjectProphecy $connection;
 
+    #[Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -131,6 +133,7 @@ class SaveCommandTest extends TestCase
         $user2->name = 'doe';
         $user2->email = 'test2';
 
+        /** @noinspection SqlInsertValues */
         $expectedSQL1 = <<<SQL
             INSERT INTO `user`
                 (`id`, `name`)
@@ -315,8 +318,9 @@ class SaveCommandTest extends TestCase
     {
         $user = new User1();
         $user->name = 'jon';
-        $user->type = UserType::TYPE1();
+        $user->type = UserType::TYPE1;
 
+        /** @noinspection SqlInsertValues */
         $expectedSQL = <<<SQL
             INSERT INTO `user`
                 (`name`, `type`)
@@ -342,6 +346,7 @@ class SaveCommandTest extends TestCase
         $user->date = new DateTime('2020-10-01 09:00:00');
         $user->dateImmutable = new DateTimeImmutable('2020-10-01 10:00:00');
 
+        /** @noinspection SqlInsertValues */
         $expectedSQL = <<<SQL
             INSERT INTO `user`
                 (`name`, `date`, `dateImmutable`)

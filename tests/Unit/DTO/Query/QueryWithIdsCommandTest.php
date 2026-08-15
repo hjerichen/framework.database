@@ -1,5 +1,4 @@
 <?php
-/** @noinspection DuplicatedCode */
 declare(strict_types=1);
 
 namespace HJerichen\FrameworkDatabase\Test\Unit\DTO\Query;
@@ -11,6 +10,7 @@ use HJerichen\FrameworkDatabase\DTO\Query\QueryWithIdsCommand;
 use HJerichen\FrameworkDatabase\Test\Helpers\User;
 use HJerichen\FrameworkDatabase\Test\Helpers\User1;
 use HJerichen\FrameworkDatabase\Test\Helpers\UserType;
+use Override;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
@@ -24,6 +24,7 @@ class QueryWithIdsCommandTest extends TestCase
     /** @var ObjectProphecy<Connection> */
     private ObjectProphecy $connection;
 
+    #[Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -162,7 +163,7 @@ class QueryWithIdsCommandTest extends TestCase
         $user->id = 1;
         $user->name = 'jon';
         $user->email = 'test@test.de';
-        $user->type = UserType::TYPE1();
+        $user->type = UserType::TYPE1;
 
         $results = [
             ['id' => '1', 'name' => 'jon', 'email' => 'test@test.de', 'type' => 'type1'],

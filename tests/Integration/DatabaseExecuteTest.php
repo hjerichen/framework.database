@@ -6,9 +6,11 @@ use HJerichen\DBUnit\Dataset\DatasetArray;
 use HJerichen\FrameworkDatabase\Database\Schema\TablesProvider;
 use HJerichen\FrameworkDatabase\Test\Helpers\MyTablesProvider;
 use HJerichen\FrameworkDatabase\Testing\DatabaseTestCase;
+use Override;
 
 class DatabaseExecuteTest extends DatabaseTestCase
 {
+    #[Override]
     protected function getSchemaTablesProvider(): TablesProvider
     {
         return new MyTablesProvider();

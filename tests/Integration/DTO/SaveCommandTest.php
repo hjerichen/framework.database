@@ -15,17 +15,20 @@ use HJerichen\FrameworkDatabase\Test\Helpers\User1;
 use HJerichen\FrameworkDatabase\Test\Helpers\UserType;
 use HJerichen\FrameworkDatabase\Test\Helpers\UserTypeCollection;
 use HJerichen\FrameworkDatabase\Testing\DatabaseTestCase;
+use Override;
 
 class SaveCommandTest extends DatabaseTestCase
 {
     private SaveCommand $saveCommand;
 
+    #[Override]
     protected function setUp(): void
     {
         parent::setUp();
         $this->saveCommand = new SaveCommand($this->connection);
     }
 
+    #[Override]
     protected function getSchemaTablesProvider(): TablesProvider
     {
         return new MyTablesProvider();
@@ -47,7 +50,7 @@ class SaveCommandTest extends DatabaseTestCase
         $user1 = new User1();
         $user1->name = 'jon';
         $user1->email = 'test1';
-        $user1->types = new UserTypeCollection([UserType::TYPE1(), UserType::TYPE2()]);
+        $user1->types = new UserTypeCollection([UserType::TYPE1, UserType::TYPE2]);
         $user1->dateImmutable = null;
         $user1->categories = ['cat1', 'cat2'];
         $user1->product = $product1;
@@ -56,7 +59,7 @@ class SaveCommandTest extends DatabaseTestCase
         $user2 = new User1();
         $user2->name = 'doe';
         $user2->email = 'test2';
-        $user2->type = UserType::TYPE2();
+        $user2->type = UserType::TYPE2;
         $user2->date = new DateTime('2020-01-01 00:00:00');
         $user2->dateImmutable = new DateTimeImmutable('2020-01-01 10:00:00');
 
@@ -74,10 +77,10 @@ class SaveCommandTest extends DatabaseTestCase
                     'type' => 'type1',
                     'date' => null,
                     'dateImmutable' => null,
-                    'types' => '["type1","type2"]',
-                    'categories' => '["cat1","cat2"]',
-                    'product' => '{"id":10,"ean":"test1"}',
-                    'products' => '["{\"id\":10,\"ean\":\"test1\"}","{\"id\":11,\"ean\":\"test2\",\"children\":[{\"id\":10,\"ean\":\"test1\"}]}"]',
+                    'types' => '["type1", "type2"]',
+                    'categories' => '["cat1", "cat2"]',
+                    'product' => '{"id": 10, "ean": "test1"}',
+                    'products' => '["{\"id\":10,\"ean\":\"test1\"}", "{\"id\":11,\"ean\":\"test2\",\"children\":[{\"id\":10,\"ean\":\"test1\"}]}"]',
                 ],
                 [
                     'id' => 2,
@@ -98,7 +101,7 @@ class SaveCommandTest extends DatabaseTestCase
         $query = new QueryWithIdsCommand($this->connection);
         $actual = $query->executeForOne(User1::class, 1);
         $expected = clone $user1;
-        $expected->type = UserType::TYPE1();
+        $expected->type = UserType::TYPE1;
         $expected->date = null;
         $this->assertEquals($expected, $actual);
     }

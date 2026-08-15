@@ -4,6 +4,8 @@ namespace HJerichen\FrameworkDatabase\DTO\TableNameResolver;
 
 use HJerichen\FrameworkDatabase\DTO\Attributes\Table;
 use HJerichen\FrameworkDatabase\DTO\DTO;
+use Override;
+use ReflectionAttribute;
 use ReflectionClass;
 
 class TableNameResolverAttribute implements TableNameResolver
@@ -14,6 +16,7 @@ class TableNameResolverAttribute implements TableNameResolver
     }
 
     /** @param DTO|class-string $objectOrClass */
+    #[Override]
     public function getTableName(DTO|string $objectOrClass): string
     {
         $tableAttribute = $this->getAttribute($objectOrClass);
@@ -25,13 +28,14 @@ class TableNameResolverAttribute implements TableNameResolver
     /**
      * @param DTO|class-string $object
      * @noinspection PhpDocMissingThrowsInspection
-     * @noinspection PhpDocSignatureIsNotCompleteInspection
+     * @psalm-suppress UnnecessaryVarAnnotation
      */
     private function getAttribute(DTO|string $object): ?Table
     {
         $class = new ReflectionClass($object);
+        /** @var ReflectionAttribute<Table>|null $attribute */
         $attribute = $class->getAttributes(Table::class)[0] ?? null;
 
-        return $attribute ? $attribute->newInstance() : null;
+        return $attribute?->newInstance();
     }
 }

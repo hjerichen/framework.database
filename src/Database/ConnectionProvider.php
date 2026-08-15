@@ -5,6 +5,7 @@ namespace HJerichen\FrameworkDatabase\Database;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\DriverManager;
 use Doctrine\DBAL\Exception;
+use Doctrine\DBAL\Tools\DsnParser;
 use HJerichen\ClassInstantiator\Attribute\Instantiator;
 use HJerichen\FrameworkDatabase\Configuration;
 use HJerichen\FrameworkDatabase\ObjectFactory;
@@ -23,12 +24,8 @@ class ConnectionProvider
     public function getConnection(): Connection
     {
         if (self::$connection === null) {
-            $connectionParams = [
-                'url' => $this->configuration->getDatabaseUrl()
-            ];
+            $connectionParams = (new DsnParser())->parse($this->configuration->getDatabaseUrl());
             self::$connection = DriverManager::getConnection($connectionParams);
-            /** @psalm-suppress InternalMethod */
-            self::$connection->connect();
         }
         return self::$connection;
     }

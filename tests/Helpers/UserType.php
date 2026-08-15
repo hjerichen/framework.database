@@ -1,18 +1,10 @@
-<?php /** @noinspection PhpUnusedPrivateFieldInspection */
+<?php
 declare(strict_types=1);
 
 namespace HJerichen\FrameworkDatabase\Test\Helpers;
 
-use HJerichen\Framework\Types\Enum;
-
-/**
- * @method static TYPE1()
- * @method static TYPE2()
- * @psalm-immutable
- * @template-extends Enum<string>
- */
-class UserType extends Enum
+enum UserType: string
 {
-    private const TYPE1 = 'type1';
-    private const TYPE2 = 'type2';
+    case TYPE1 = 'type1';
+    case TYPE2 = 'type2';
 }
