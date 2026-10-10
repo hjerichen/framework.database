@@ -10,11 +10,11 @@ use HJerichen\FrameworkDatabase\DTO\DTO;
 class QueryCollectionWithSQLCommand extends QueryCommandAbstract
 {
     /**
-     * @template T of DTO
-     * @param DTOCollection<T>|class-string<DTOCollection<T>> $collection
+     * @template T of DTOCollection
+     * @param T|class-string<T> $collection
      * @param string $sql
      * @param array<string, mixed> $parameters
-     * @return DTOCollection<T>
+     * @return T
      * @throws Exception
      */
     public function execute(DTOCollection|string $collection, string $sql, array $parameters = []): DTOCollection

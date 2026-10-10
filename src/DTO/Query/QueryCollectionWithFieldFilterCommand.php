@@ -9,10 +9,10 @@ use HJerichen\FrameworkDatabase\DTO\DTOCollection;
 class QueryCollectionWithFieldFilterCommand extends QueryCommandAbstract
 {
     /**
-     * @template T of DTO
-     * @param DTOCollection<T>|class-string<DTOCollection<T>> $collection
+     * @template T of DTOCollection
+     * @param T|class-string<T> $collection
      * @param array<string,mixed> $fieldFilter
-     * @return DTOCollection<T>
+     * @return T
      * @throws Exception
      */
     public function execute(DTOCollection|string $collection, array $fieldFilter = []): DTOCollection
