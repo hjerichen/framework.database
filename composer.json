@@ -14,7 +14,7 @@
         "ext-pdo": "*",
         "hjerichen/collections": "^1.3",
         "hjerichen/framework": "^0.4",
-        "doctrine/dbal": "^4.4"
+        "doctrine/dbal": "^4.5"
     },
     "require-dev": {
         "roave/security-advisories": "dev-master",

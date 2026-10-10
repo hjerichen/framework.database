@@ -6,6 +6,7 @@ use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Platforms\PostgreSQLPlatform;
 use Doctrine\DBAL\Result;
 use Doctrine\DBAL\Schema\Schema;
+use Doctrine\DBAL\Schema\Table as TableSchema;
 use HJerichen\FrameworkDatabase\Database\Schema\SchemaProvider;
 use HJerichen\FrameworkDatabase\Database\Schema\SchemaSynchronizer;
 use HJerichen\FrameworkDatabase\Test\Helpers\UserTable1;
@@ -43,8 +44,8 @@ class SchemaSynchronizerTest extends TestCase
 
     public function testForNoChanges(): void
     {
-        $schemaWanted = new Schema([(new UserTable1())->getSchema()]);
-        $schemaCurrent = new Schema([(new UserTable1())->getSchema()]);
+        $schemaWanted = $this->createSchema((new UserTable1())->getSchema());
+        $schemaCurrent = $this->createSchema((new UserTable1())->getSchema());
 
         $this->schemaProvider->getWantedSchema()->willReturn($schemaWanted);
         $this->schemaProvider->getCurrentSchema()->willReturn($schemaCurrent);
@@ -58,8 +59,8 @@ class SchemaSynchronizerTest extends TestCase
     {
         $result = $this->prophesize(Result::class);
 
-        $schemaWanted = new Schema([(new UserTable1())->getSchema()]);
-        $schemaCurrent = new Schema([(new UserTable2())->getSchema()]);
+        $schemaWanted = $this->createSchema((new UserTable1())->getSchema());
+        $schemaCurrent = $this->createSchema((new UserTable2())->getSchema());
 
         $this->schemaProvider->getWantedSchema()->willReturn($schemaWanted);
         $this->schemaProvider->getCurrentSchema()->willReturn($schemaCurrent);
@@ -74,8 +75,8 @@ class SchemaSynchronizerTest extends TestCase
     {
         $result = $this->prophesize(Result::class);
 
-        $schemaWanted = new Schema([(new UserTable1())->getSchema()]);
-        $schemaCurrent = new Schema([(new UserTable2())->getSchema()]);
+        $schemaWanted = $this->createSchema((new UserTable1())->getSchema());
+        $schemaCurrent = $this->createSchema((new UserTable2())->getSchema());
 
         $this->schemaProvider->getWantedSchema()->willReturn($schemaWanted);
         $this->schemaProvider->getCurrentSchema()->willReturn($schemaCurrent);
@@ -88,5 +89,10 @@ class SchemaSynchronizerTest extends TestCase
 
         $this->schemaSynchronizer->setPlatform(new PostgreSQLPlatform());
         $this->schemaSynchronizer->execute();
+    }
+
+    private function createSchema(TableSchema $table): Schema
+    {
+        return Schema::editor()->addTable($table)->create();
     }
 }

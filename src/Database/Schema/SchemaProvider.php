@@ -23,7 +23,12 @@ class SchemaProvider
             callback: static fn(Table $table) => $table->getSchema(),
             array: $this->tablesProvider->getSchemaTables()
         );
-        return new Schema($tables);
+
+        $editor = Schema::editor();
+        foreach ($tables as $table) {
+            $editor->addTable($table);
+        }
+        return $editor->create();
     }
 
     /** @throws Exception */
