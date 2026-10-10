@@ -18,7 +18,7 @@ The library wraps Doctrine DBAL behind the framework's configuration and object-
 
 Schema definitions are provided as `Database\Schema\Table` implementations collected by a `TablesProvider`. `SchemaProvider` compares those desired table schemas with the live database schema, and `SchemaSynchronizer` calculates and executes the resulting MySQL schema changes.
 
-The DTO persistence layer treats DTO properties as database fields. Query commands share SQL execution, table-name resolution, and row-to-object hydration through `QueryCommandAbstract` and `Utils`; save and delete behavior lives in separate commands. The default table name is the DTO class's short name with its first character lowercased, and `#[DTO\Attributes\Table]` can override it. `SaveCommand` batches objects by table and initialized-property set, so unset typed properties are omitted from inserts and updates. DTOs and their schema definitions therefore need to agree on field names and types.
+The DTO persistence layer treats DTO properties as database fields. Query commands share SQL execution, table-name resolution, and row-to-object hydration through `QueryCommandAbstract` and `Utils`; save and delete behavior lives in separate commands. The default table name is the DTO class's short name with its first character lowercased, and `#[DTO\Attributes\Table]` can override it. `SaveCommand` batches objects by table and write-property set. Uninitialized typed properties are omitted, and a `null` `id` is also omitted so the database can generate an ID that is then assigned to the DTO. DTOs and their schema definitions therefore need to agree on field names and types.
 
 ## Repository conventions
 

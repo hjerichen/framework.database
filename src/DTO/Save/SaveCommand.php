@@ -78,9 +78,10 @@ class SaveCommand
         $fields = [];
         $reflection = new ReflectionClass($object);
         foreach ($reflection->getProperties() as $property) {
-            if ($property->isInitialized($object)) {
-                $fields[] = $property->name;
-            }
+            if (!$property->isInitialized($object)) continue;
+            if ($property->name === 'id' && $property->getValue($object) === null) continue;
+
+            $fields[] = $property->name;
         }
         return implode('|', $fields);
     }

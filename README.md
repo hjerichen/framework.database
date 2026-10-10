@@ -73,7 +73,7 @@ $loadedUser = (new QueryWithIdsCommand($connection))
     ->executeForOne(User::class, $user->id);
 ```
 
-`SaveCommand::execute()` akzeptiert mehrere DTOs in einem Aufruf. Objekte werden nach Tabelle und ihren initialisierten Properties gruppiert; nicht initialisierte typisierte Properties werden beim Insert ausgelassen. Ein gesetztes `id`-Feld wird für Updates beziehungsweise Upserts verwendet.
+`SaveCommand::execute()` akzeptiert mehrere DTOs in einem Aufruf. Objekte werden nach Tabelle und ihren zu speichernden Properties gruppiert; nicht initialisierte typisierte Properties werden beim Insert ausgelassen. Auch eine initialisierte `id` mit Wert `null` wird ausgelassen: Die Datenbank erzeugt eine neue ID, die danach dem DTO zugewiesen wird. Eine nicht-null gesetzte `id` wird für Updates beziehungsweise Upserts verwendet.
 
 Für weitere Abfragen stehen spezialisierte Kommandos zur Verfügung:
 

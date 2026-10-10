@@ -254,6 +254,34 @@ class SaveCommandTest extends TestCase
         self::assertSame(10, $user3->id);
     }
 
+    public function testDTOWithNullIDGetsGeneratedID(): void
+    {
+        $user = new User2();
+        $user->id = null;
+        $user->name = 'jon';
+
+        $expectedSQL = <<<SQL
+            INSERT INTO `user2`
+                (`name`)
+            VALUES
+                (:name_1)
+            ON DUPLICATE KEY UPDATE
+                `name` = VALUES(`name`), `logins` = `logins`, `active` = `active`, `value` = `value`
+            SQL;
+        $expectedParameters = [
+            'name_1' => 'jon',
+        ];
+        $this->connection
+            ->executeStatement($expectedSQL, $expectedParameters)
+            ->willReturn(1)
+            ->shouldBeCalledOnce();
+
+        $this->command->execute([$user]);
+
+        /** @psalm-suppress TypeDoesNotContainType */
+        self::assertSame(expected: 8, actual: $user->id);
+    }
+
     /** @psalm-suppress RedundantCondition */
     public function testDTOGetIdsMixed(): void
     {

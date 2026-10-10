@@ -9,7 +9,7 @@ use HJerichen\FrameworkDatabase\DTO\DTO;
  */
 class User2 implements DTO
 {
-    public int $id;
+    public ?int $id;
     public ?int $logins;
     public ?bool $active;
     public ?float $value;
