@@ -5,6 +5,7 @@ namespace HJerichen\FrameworkDatabase\Test\Unit\DTO\Save;
 use DateTime;
 use DateTimeImmutable;
 use Doctrine\DBAL\Connection;
+use HJerichen\FrameworkDatabase\DTO\DTOCollection;
 use HJerichen\FrameworkDatabase\DTO\Save\SaveCommand;
 use HJerichen\FrameworkDatabase\Test\Helpers\Product;
 use HJerichen\FrameworkDatabase\Test\Helpers\User;
@@ -37,7 +38,7 @@ class SaveCommandTest extends TestCase
 
     /* TESTS */
 
-    public function testWithOneObject(): void
+    public function testWithSingleDTO(): void
     {
         $user = new User();
         $user->name = 'jon';
@@ -58,7 +59,9 @@ class SaveCommandTest extends TestCase
         $this->connection
             ->executeStatement($expectedSQL, $expectedParameters)
             ->shouldBeCalledOnce();
-        $this->command->execute([$user]);
+        $this->command->execute($user);
+
+        self::assertSame(8, $user->id);
     }
 
     public function testWithOneObjectHasAttribute(): void
@@ -85,7 +88,8 @@ class SaveCommandTest extends TestCase
         $this->command->execute([$user]);
     }
 
-    public function testWithMultipleObjects(): void
+    /** @noinspection PhpTypedPropertyMightBeUninitializedInspection */
+    public function testWithDTOCollection(): void
     {
         $user1 = new User();
         $user1->name = 'jon';
@@ -112,7 +116,10 @@ class SaveCommandTest extends TestCase
         $this->connection
             ->executeStatement($expectedSQL, $expectedParameters)
             ->shouldBeCalledOnce();
-        $this->command->execute([$user1, $user2]);
+        $this->command->execute(new DTOCollection(User::class, [$user1, $user2]));
+
+        self::assertSame(8, $user1->id);
+        self::assertSame(9, $user2->id);
     }
 
     public function testWithEmptyArray(): void

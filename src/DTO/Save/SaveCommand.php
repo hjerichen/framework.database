@@ -7,6 +7,7 @@ use DateTimeInterface;
 use Doctrine\DBAL\Connection;
 use HJerichen\Collections\Collection;
 use HJerichen\FrameworkDatabase\DTO\DTO;
+use HJerichen\FrameworkDatabase\DTO\DTOCollection;
 use HJerichen\FrameworkDatabase\DTO\QuoteTableColumnTrait;
 use HJerichen\FrameworkDatabase\DTO\TableNameResolver\TableNameResolver;
 use HJerichen\FrameworkDatabase\DTO\TableNameResolver\TableNameResolverAttribute;
@@ -33,23 +34,33 @@ class SaveCommand
     }
 
     /**
-     * @param DTO[] $objects
+     * @template T of DTO
+     * @param DTOCollection<T>|T[]|T $objects
      */
-    public function execute(array $objects): void
+    public function execute(DTOCollection|DTO|array $objects): void
     {
         $this->setObjects($objects);
         $this->saveObjects();
     }
 
     /**
-     * @param DTO[] $objects
+     * @template T of DTO
+     * @param DTOCollection<T>|T[]|T $objects
      */
-    private function setObjects(array $objects): void
+    private function setObjects(DTOCollection|DTO|array $objects): void
     {
+        if ($objects instanceof DTO) {
+            $objectList = [$objects];
+        } elseif ($objects instanceof DTOCollection) {
+            $objectList = $objects->asArray();
+        } else {
+            $objectList = $objects;
+        }
+        /** @var DTO[] $objectList */
         $this->allFieldsForTable = [];
         $this->groupedObjects = [];
 
-        foreach ($objects as $object) {
+        foreach ($objectList as $object) {
             $this->gatherAllFieldsForTable($object);
             $tableName = $this->getTableName($object);
             $fieldsString = $this->buildFieldsString($object);
